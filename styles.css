@@ -119,48 +119,88 @@ body {
 
 /* Servicios */
 .services {
-    padding: 5rem 2rem;
+    padding: 4rem 2rem;
     background-color: var(--light-bg);
 }
 
 .services h2 {
     text-align: center;
     margin-bottom: 3rem;
-    font-size: 2.5rem;
-    color: var(--text-color);
+    color: var(--primary-color);
 }
 
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+.services-container {
+    position: relative;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 40px;
+}
+
+.services-carousel {
+    display: flex;
+    gap: 2rem;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 1rem 0;
 }
 
 .service-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
     background: var(--white);
     padding: 2rem;
     border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
 .service-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: translateY(-5px);
 }
 
-.service-icon {
-    font-size: 3rem;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    z-index: 2;
 }
 
-.service-card h3 {
-    margin-bottom: 1rem;
-    color: var(--text-color);
+.carousel-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.carousel-button.prev {
+    left: 0;
+}
+
+.carousel-button.next {
+    right: 0;
+}
+
+@media (min-width: 768px) {
+    .service-card {
+        flex: 0 0 calc(50% - 1rem);
+    }
+}
+
+@media (min-width: 1024px) {
+    .service-card {
+        flex: 0 0 calc(33.333% - 1.33rem);
+    }
 }
 
 /* Formulario de contacto */

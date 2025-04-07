@@ -79,4 +79,92 @@ const observer = new IntersectionObserver((entries, observer) => {
 
 document.querySelectorAll('.service-card').forEach(card => {
     observer.observe(card);
+});
+
+// Services carousel functionality
+function initServicesCarousel() {
+    const carousel = document.querySelector('.services-carousel');
+    const prevButton = document.querySelector('.carousel-button.prev');
+    const nextButton = document.querySelector('.carousel-button.next');
+    const cards = document.querySelectorAll('.service-card');
+    
+    let currentIndex = 0;
+    const cardWidth = cards[0].offsetWidth;
+    const gap = 32; // 2rem gap
+    let autoSlideInterval;
+
+    function updateCarousel() {
+        const offset = currentIndex * (cardWidth + gap);
+        carousel.scrollTo({
+            left: offset,
+            behavior: 'smooth'
+        });
+    }
+
+    function nextSlide() {
+        currentIndex++;
+        if (currentIndex >= cards.length) {
+            currentIndex = 0;
+        }
+        updateCarousel();
+    }
+
+    function prevSlide() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = cards.length - 1;
+        }
+        updateCarousel();
+    }
+
+    function getVisibleCards() {
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 768) return 2;
+        return 1;
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide(); // Limpiar intervalo existente
+        autoSlideInterval = setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
+    }
+
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+        }
+    }
+
+    // Event listeners
+    nextButton.addEventListener('click', () => {
+        nextSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    prevButton.addEventListener('click', () => {
+        prevSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    // Pausar auto-slide cuando el mouse está sobre el carrusel
+    carousel.addEventListener('mouseenter', stopAutoSlide);
+    carousel.addEventListener('mouseleave', startAutoSlide);
+
+    // Update on window resize
+    window.addEventListener('resize', () => {
+        currentIndex = 0;
+        updateCarousel();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    // Iniciar auto-slide
+    startAutoSlide();
+}
+
+// Initialize services carousel when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initServicesCarousel();
+    initSlider();
 }); 
