@@ -7,53 +7,19 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-                sh '''
-                    ls -la
-                    pwd
-                    whoami
-                '''
-            }
-        }
-
         stage('Deploy') {
             steps {
                 sh '''
-                    echo "Eliminando contenedor anterior (si existe)..."
-                    docker rm -fv pantech-web || true
-                    
-                    docker compose ps
+                    docker compose down
                     docker compose up -d --build
-                    sleep 10
-                    docker ps
-                    echo "Verificando archivos en el contenedor:"
-                    docker exec pantech-web ls -la /var/www/html
-                    echo "Verificando configuración de Nginx:"
-                    docker exec pantech-web nginx -t
-                    echo "Verificando logs de Nginx:"
-                    docker exec pantech-web cat /var/log/nginx/error.log || true
-                    echo "Verificando acceso al sitio:"
-                    curl -v http://localhost:160 || true
                 '''
             }
         }
     }
 
     post {
-        success {
-            echo 'Pipeline ejecutada exitosamente'
-        }
         failure {
-            sh '''
-                echo "Logs del contenedor:"
-                docker logs pantech-web || true
-                echo "Estado del contenedor:"
-                docker ps -a || true
-                echo "Configuración de Nginx:"
-                docker exec pantech-web cat /etc/nginx/http.d/default.conf || true
-            '''
+            sh 'docker logs pantech-web'
             echo 'Pipeline falló'
         }
         always {
