@@ -10,7 +10,7 @@ services:
     networks:
       - pantech-network
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html:ro
 
 networks:
   pantech-network:
