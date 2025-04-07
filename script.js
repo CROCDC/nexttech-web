@@ -163,8 +163,9 @@ function initServicesCarousel() {
     startAutoSlide();
 }
 
-// Initialize services carousel when DOM is loaded
+// Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     initServicesCarousel();
-    initSlider();
+    initMobileMenu();
+    initScrollAnimation();
 }); 
