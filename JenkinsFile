@@ -10,6 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                sh 'ls -la'
             }
         }
         
@@ -17,9 +18,10 @@ pipeline {
             steps {
                 sh 'docker compose down || true'
                 sh 'docker compose up -d --build'
-                sh 'docker exec pantech-web ls -la /var/www/html'
-                sh 'docker exec pantech-web cat /etc/nginx/http.d/default.conf'
+                sh 'sleep 5' // Esperar a que el contenedor esté listo
                 sh 'docker ps'
+                sh 'docker exec pantech-web ls -la /var/www/html'
+                sh 'docker exec pantech-web nginx -t'
             }
         }
     }
@@ -30,6 +32,7 @@ pipeline {
         }
         failure {
             echo 'Pipeline falló'
+            sh 'docker logs pantech-web'
         }
         always {
             cleanWs()
