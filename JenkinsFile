@@ -15,19 +15,18 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                }
+                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
             }
         }
         
         stage('Deploy') {
             steps {
                 script {
-                    sh 'docker-compose down || true'
+                    sh 'docker compose down || true'
                     
-                    sh 'docker-compose up -d'
+                    sh 'docker compose up -d'
                     
+                    echo 'Despliegue completado con éxito'
                 }
             }
         }
