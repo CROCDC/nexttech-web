@@ -54,7 +54,12 @@ function initMobileMenu() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
     
+    if (!menuToggle || !navLinks) return;
+    
     menuToggle.addEventListener('click', () => {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !isExpanded);
+        
         navLinks.classList.toggle('active');
         menuToggle.querySelector('i').classList.toggle('fa-bars');
         menuToggle.querySelector('i').classList.toggle('fa-times');
@@ -66,6 +71,7 @@ function initMobileMenu() {
             navLinks.classList.remove('active');
             menuToggle.querySelector('i').classList.add('fa-bars');
             menuToggle.querySelector('i').classList.remove('fa-times');
+            menuToggle.setAttribute('aria-expanded', 'false');
         });
     });
 }
@@ -76,9 +82,23 @@ function initScrollAnimation() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Actualizar la URL sin recargar la página
+                history.pushState(null, '', targetId);
+                
+                // Actualizar el estado activo de los enlaces
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.removeAttribute('aria-current');
+                });
+                this.setAttribute('aria-current', 'page');
+            }
         });
     });
 
@@ -86,23 +106,25 @@ function initScrollAnimation() {
     let lastScroll = 0;
     const header = document.querySelector('.header');
 
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll <= 0) {
-            header.classList.remove('scroll-up');
-            return;
-        }
-        
-        if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
-            header.classList.remove('scroll-up');
-            header.classList.add('scroll-down');
-        } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
-            header.classList.remove('scroll-down');
-            header.classList.add('scroll-up');
-        }
-        lastScroll = currentScroll;
-    });
+    if (header) {
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                header.classList.remove('scroll-up');
+                return;
+            }
+            
+            if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
+                header.classList.remove('scroll-up');
+                header.classList.add('scroll-down');
+            } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
+                header.classList.remove('scroll-down');
+                header.classList.add('scroll-up');
+            }
+            lastScroll = currentScroll;
+        });
+    }
 }
 
 // Services carousel functionality
@@ -127,6 +149,17 @@ function initServicesCarousel() {
         carousel.scrollTo({
             left: offset,
             behavior: 'smooth'
+        });
+        
+        // Actualizar atributos ARIA para accesibilidad
+        cards.forEach((card, index) => {
+            if (index === currentIndex) {
+                card.setAttribute('aria-hidden', 'false');
+                card.setAttribute('tabindex', '0');
+            } else {
+                card.setAttribute('aria-hidden', 'true');
+                card.setAttribute('tabindex', '-1');
+            }
         });
     }
 
@@ -188,6 +221,17 @@ function initServicesCarousel() {
         startAutoSlide();
     });
 
+    // Inicializar atributos ARIA
+    cards.forEach((card, index) => {
+        if (index === 0) {
+            card.setAttribute('aria-hidden', 'false');
+            card.setAttribute('tabindex', '0');
+        } else {
+            card.setAttribute('aria-hidden', 'true');
+            card.setAttribute('tabindex', '-1');
+        }
+    });
+
     // Iniciar auto-slide
     startAutoSlide();
 }
@@ -199,10 +243,43 @@ function initContactForm() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Validación básica
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mensaje = document.getElementById('mensaje').value.trim();
+            
+            if (!nombre || !email || !mensaje) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
+            
+            // Validación de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, ingresa un email válido');
+                return;
+            }
+            
             // Aquí puedes agregar la lógica para enviar el formulario
             alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
             contactForm.reset();
         });
+    }
+}
+
+// Función para mejorar el rendimiento
+function initPerformanceOptimizations() {
+    // Lazy loading para imágenes
+    if ('loading' in HTMLImageElement.prototype) {
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        images.forEach(img => {
+            img.src = img.dataset.src;
+        });
+    } else {
+        // Fallback para navegadores que no soportan lazy loading nativo
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+        document.body.appendChild(script);
     }
 }
 
@@ -212,4 +289,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initScrollAnimation();
     initContactForm();
+    initPerformanceOptimizations();
 }); 
