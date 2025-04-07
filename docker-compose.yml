@@ -10,12 +10,7 @@ services:
     restart: always
     networks:
       - pantech-network
-    volumes:
-      - type: bind
-        source: .
-        target: /var/www/html
-        read_only: true
 
 networks:
   pantech-network:
-    driver: bridge 
+    driver: bridge

@@ -1,11 +1,11 @@
 pipeline {
     agent any
-    
+
     environment {
         DOCKER_IMAGE = 'pantech-web'
         DOCKER_TAG = 'latest'
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
@@ -17,11 +17,13 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 sh '''
-                    docker compose down || true
+                    echo "Eliminando contenedor anterior (si existe)..."
+                    docker rm -fv pantech-web || true
+                    
                     docker compose ps
                     docker compose up -d --build
                     sleep 10
@@ -38,7 +40,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
             echo 'Pipeline ejecutada exitosamente'
