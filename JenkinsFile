@@ -13,28 +13,17 @@ pipeline {
             }
         }
         
-        stage('Build Docker Image') {
-            steps {
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-            }
-        }
-        
         stage('Deploy') {
             steps {
-                script {
-                    sh 'docker compose down || true'
-                    
-                    sh 'docker compose up -d'
-                    
-                    echo 'Despliegue completado con éxito'
-                }
+                sh 'docker compose down || true'
+                sh 'docker compose up -d --build'
             }
         }
     }
     
     post {
         success {
-            echo 'Pipeline ejecutado con éxito'
+            echo 'Pipeline ejecutada exitosamente'
         }
         failure {
             echo 'Pipeline falló'
