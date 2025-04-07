@@ -41,5 +41,7 @@ RUN chown -R nginx:nginx /var/www/html && \
 # Exponer puerto 80
 EXPOSE 80
 
+USER root
+
 # Iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"] 
