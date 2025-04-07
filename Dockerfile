@@ -13,9 +13,10 @@ RUN echo "ServerName localhost" >> /etc/apache2/httpd.conf && \
     sed -i 's#^Options Indexes#Options -Indexes +FollowSymLinks#g' /etc/apache2/httpd.conf && \
     sed -i 's#^AllowOverride None#AllowOverride All#g' /etc/apache2/httpd.conf && \
     echo -e '<Directory "/var/www/html">\n\
-    Options Indexes FollowSymLinks\n\
+    Options -Indexes +FollowSymLinks\n\
     AllowOverride All\n\
     Require all granted\n\
+    DirectoryIndex index.html\n\
 </Directory>' >> /etc/apache2/httpd.conf
 
 # Habilitar módulos necesarios
@@ -28,7 +29,7 @@ COPY . /var/www/html/
 # Establecer permisos correctos
 RUN chown -R apache:apache /var/www/html && \
     chmod -R 755 /var/www/html && \
-    chmod 777 /var/www/html
+    chmod 644 /var/www/html/index.html
 
 # Exponer puerto 80
 EXPOSE 80
