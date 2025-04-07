@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  web:
+    image: pantech-web:latest
+    container_name: pantech-web
+    ports:
+      - "160:80"
+    restart: always
+    networks:
+      - pantech-network
+    volumes:
+      - ./:/var/www/localhost/htdocs
+
+networks:
+  pantech-network:
+    driver: bridge 
