@@ -1,8 +1,12 @@
 .git
 .gitignore
+.idea
+.DS_Store
+*.log
+node_modules
+.env
 .dockerignore
 Dockerfile
 docker-compose.yml
-README.md
-node_modules
-*.log 
+Jenkinsfile
+README.md 

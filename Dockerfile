@@ -14,15 +14,21 @@ RUN echo 'server { \
     index index.html; \
     location / { \
         try_files $uri $uri/ /index.html; \
+        add_header Cache-Control "no-cache"; \
     } \
+    error_page 404 /index.html; \
+    error_log /var/log/nginx/error.log debug; \
+    access_log /var/log/nginx/access.log; \
 }' > /etc/nginx/http.d/default.conf
 
 # Copiar archivos del sitio web
-COPY . /var/www/html/
+COPY index.html styles.css script.js images/ /var/www/html/
 
 # Establecer permisos correctos
 RUN chown -R nginx:nginx /var/www/html && \
-    chmod -R 755 /var/www/html
+    chmod -R 755 /var/www/html && \
+    mkdir -p /var/log/nginx && \
+    chown -R nginx:nginx /var/log/nginx
 
 # Exponer puerto 80
 EXPOSE 80
