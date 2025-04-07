@@ -1,7 +1,7 @@
-FROM alpine:latest
+FROM alpine:3.18
 
 # Instalar un servidor web ligero (httpd)
-RUN apk add --no-cache httpd
+RUN apk add --no-cache apache2
 
 # Copiar los archivos del sitio web
 COPY . /var/www/localhost/htdocs/
