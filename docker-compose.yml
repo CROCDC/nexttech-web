@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   web:
     build:
@@ -13,10 +11,10 @@ services:
     networks:
       - pantech-network
     volumes:
-      - ./index.html:/var/www/html/index.html:ro
-      - ./styles.css:/var/www/html/styles.css:ro
-      - ./script.js:/var/www/html/script.js:ro
-      - ./images:/var/www/html/images:ro
+      - type: bind
+        source: .
+        target: /var/www/html
+        read_only: true
 
 networks:
   pantech-network:
