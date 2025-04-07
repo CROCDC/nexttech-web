@@ -13,22 +13,10 @@ services:
     networks:
       - pantech-network
     volumes:
-      - type: bind
-        source: ./index.html
-        target: /var/www/html/index.html
-        read_only: true
-      - type: bind
-        source: ./styles.css
-        target: /var/www/html/styles.css
-        read_only: true
-      - type: bind
-        source: ./script.js
-        target: /var/www/html/script.js
-        read_only: true
-      - type: bind
-        source: ./images
-        target: /var/www/html/images
-        read_only: true
+      - ./index.html:/var/www/html/index.html:ro
+      - ./styles.css:/var/www/html/styles.css:ro
+      - ./script.js:/var/www/html/script.js:ro
+      - ./images:/var/www/html/images:ro
 
 networks:
   pantech-network:
