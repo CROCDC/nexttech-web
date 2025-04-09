@@ -85,6 +85,20 @@ body {
     color: var(--primary-color);
 }
 
+.nav-links a.work-with-us-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.nav-links a.work-with-us-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
+}
+
 /* Hero section */
 .hero {
     position: relative;
@@ -522,6 +536,12 @@ footer {
     
     .service-icon {
         font-size: 2.5rem;
+    }
+
+    .nav-links a.work-with-us-btn {
+        margin-top: 1rem;
+        text-align: center;
+        display: block;
     }
 }
 

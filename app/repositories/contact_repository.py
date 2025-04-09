@@ -1,6 +1,6 @@
 from datetime import datetime
 from app.models.contact import ContactMessage
-from app import db
+from app.factory import db
 
 class ContactMessageRepository:
     @staticmethod
