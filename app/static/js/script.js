@@ -33,12 +33,12 @@ const header = document.querySelector('.header');
 
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
-    
+
     if (currentScroll <= 0) {
         header.classList.remove('scroll-up');
         return;
     }
-    
+
     if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
         header.classList.remove('scroll-up');
         header.classList.add('scroll-down');
@@ -53,13 +53,13 @@ window.addEventListener('scroll', () => {
 function initMobileMenu() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
-    
+
     if (!menuToggle || !navLinks) return;
-    
+
     menuToggle.addEventListener('click', () => {
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
         menuToggle.setAttribute('aria-expanded', !isExpanded);
-        
+
         navLinks.classList.toggle('active');
         menuToggle.querySelector('i').classList.toggle('fa-bars');
         menuToggle.querySelector('i').classList.toggle('fa-times');
@@ -84,15 +84,15 @@ function initScrollAnimation() {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-            
+
             if (targetElement) {
                 targetElement.scrollIntoView({
                     behavior: 'smooth'
                 });
-                
+
                 // Actualizar la URL sin recargar la página
                 history.pushState(null, '', targetId);
-                
+
                 // Actualizar el estado activo de los enlaces
                 document.querySelectorAll('.nav-links a').forEach(link => {
                     link.removeAttribute('aria-current');
@@ -109,12 +109,12 @@ function initScrollAnimation() {
     if (header) {
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
-            
+
             if (currentScroll <= 0) {
                 header.classList.remove('scroll-up');
                 return;
             }
-            
+
             if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
                 header.classList.remove('scroll-up');
                 header.classList.add('scroll-down');
@@ -133,12 +133,12 @@ function initServicesCarousel() {
     const prevButton = document.querySelector('.carousel-button.prev');
     const nextButton = document.querySelector('.carousel-button.next');
     const cards = document.querySelectorAll('.service-card');
-    
+
     if (!carousel || !prevButton || !nextButton || cards.length === 0) {
         console.warn('Elementos del carrusel no encontrados');
         return;
     }
-    
+
     let currentIndex = 0;
     const cardWidth = cards[0].offsetWidth;
     const gap = 32; // 2rem gap
@@ -150,7 +150,7 @@ function initServicesCarousel() {
             left: offset,
             behavior: 'smooth'
         });
-        
+
         // Actualizar atributos ARIA para accesibilidad
         cards.forEach((card, index) => {
             if (index === currentIndex) {
@@ -240,31 +240,69 @@ function initServicesCarousel() {
 function initContactForm() {
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            // Validación básica
-            const nombre = document.getElementById('nombre').value.trim();
+
+            const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
-            const mensaje = document.getElementById('mensaje').value.trim();
-            
-            if (!nombre || !email || !mensaje) {
-                alert('Por favor, completa todos los campos');
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !message) {
+                showMessage('Please complete all fields', 'error');
                 return;
             }
-            
-            // Validación de email
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Por favor, ingresa un email válido');
+                showMessage('Please enter a valid email', 'error');
                 return;
             }
-            
-            // Aquí puedes agregar la lógica para enviar el formulario
-            alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
-            contactForm.reset();
+
+            try {
+                showMessage('Sending message...', 'info');
+
+                const response = await fetch('/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('Message sent successfully!', 'success');
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.error || 'Error sending message');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('There was an error sending the message. Please try again.', 'error');
+            }
         });
     }
+}
+
+function showMessage(message, type) {
+    const previousMessages = document.querySelectorAll('.alert-message');
+    previousMessages.forEach(msg => msg.remove());
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `alert-message ${type}`;
+    messageDiv.textContent = message;
+
+    const form = document.querySelector('.contact-form');
+    form.parentNode.insertBefore(messageDiv, form);
+
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 5000);
 }
 
 // Función para mejorar el rendimiento

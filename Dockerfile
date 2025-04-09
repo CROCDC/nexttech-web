@@ -1,47 +1,15 @@
-FROM alpine:3.18
+FROM python:3.9-slim
 
-# Instalar Nginx
-RUN apk add --no-cache nginx
+WORKDIR /app
 
-# Crear directorio para el sitio web
-RUN mkdir -p /var/www/html
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Configurar Nginx
-RUN echo 'server { \
-    listen 80; \
-    server_name localhost; \
-    root /var/www/html; \
-    index index.html; \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-        add_header Cache-Control "no-cache"; \
-        add_header X-Content-Type-Options "nosniff"; \
-        add_header X-Frame-Options "SAMEORIGIN"; \
-        add_header X-XSS-Protection "1; mode=block"; \
-    } \
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ { \
-        expires 1y; \
-        add_header Cache-Control "public, no-transform"; \
-    } \
-    error_page 404 /index.html; \
-    error_log /var/log/nginx/error.log debug; \
-    access_log /var/log/nginx/access.log combined; \
-}' > /etc/nginx/http.d/default.conf
+COPY app/ .
 
-# Copiar archivos del sitio web
-COPY . /var/www/html/
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
-# Establecer permisos correctos
-RUN chown -R nginx:nginx /var/www/html && \
-    chmod -R 755 /var/www/html && \
-    mkdir -p /var/log/nginx && \
-    chown -R nginx:nginx /var/log/nginx && \
-    chmod -R 755 /var/log/nginx
+EXPOSE 160
 
-# Exponer puerto 80
-EXPOSE 80
-
-USER root
-
-# Iniciar Nginx
-CMD ["nginx", "-g", "daemon off;"] 
+CMD ["flask", "run", "--host=0.0.0.0", "--port=160"] 
