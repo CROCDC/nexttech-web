@@ -12,6 +12,9 @@ pipeline {
                 sh '''
                     docker compose down
                     docker compose up -d --build
+                    sleep 10
+                    docker compose exec db pg_isready -U postgres
+                    docker compose exec web flask db upgrade
                 '''
             }
         }
@@ -19,7 +22,7 @@ pipeline {
 
     post {
         failure {
-            sh 'docker logs pantech-web'
+            sh 'docker compose logs web db'
             echo 'Pipeline falló'
         }
         always {

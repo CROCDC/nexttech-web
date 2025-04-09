@@ -248,18 +248,18 @@ function initContactForm() {
             const message = document.getElementById('message').value.trim();
 
             if (!name || !email || !message) {
-                showMessage('Please complete all fields', 'error');
+                showMessage('Por favor complete todos los campos', 'error');
                 return;
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                showMessage('Please enter a valid email', 'error');
+                showMessage('Por favor ingrese un email válido', 'error');
                 return;
             }
 
             try {
-                showMessage('Sending message...', 'info');
+                showMessage('Enviando mensaje...', 'info');
 
                 const response = await fetch('/send-message', {
                     method: 'POST',
@@ -276,14 +276,14 @@ function initContactForm() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('Message sent successfully!', 'success');
+                    showMessage('¡Mensaje enviado con éxito!', 'success');
                     contactForm.reset();
                 } else {
-                    throw new Error(data.error || 'Error sending message');
+                    throw new Error(data.error || 'Error al enviar el mensaje');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showMessage('There was an error sending the message. Please try again.', 'error');
+                showMessage('Hubo un error al enviar el mensaje. Por favor intente nuevamente.', 'error');
             }
         });
     }
@@ -295,13 +295,39 @@ function showMessage(message, type) {
 
     const messageDiv = document.createElement('div');
     messageDiv.className = `alert-message ${type}`;
-    messageDiv.textContent = message;
+    
+    // Añadir ícono según el tipo de mensaje
+    const icon = document.createElement('span');
+    icon.className = 'message-icon';
+    switch(type) {
+        case 'success':
+            icon.innerHTML = '✓';
+            break;
+        case 'error':
+            icon.innerHTML = '✕';
+            break;
+        case 'info':
+            icon.innerHTML = 'ℹ';
+            break;
+    }
+    
+    const messageText = document.createElement('span');
+    messageText.className = 'message-text';
+    messageText.textContent = message;
+    
+    messageDiv.appendChild(icon);
+    messageDiv.appendChild(messageText);
 
     const form = document.querySelector('.contact-form');
     form.parentNode.insertBefore(messageDiv, form);
 
+    // Añadir clase para animación de entrada
+    setTimeout(() => messageDiv.classList.add('show'), 10);
+
+    // Añadir clase para animación de salida antes de remover
     setTimeout(() => {
-        messageDiv.remove();
+        messageDiv.classList.remove('show');
+        setTimeout(() => messageDiv.remove(), 300);
     }, 5000);
 }
 

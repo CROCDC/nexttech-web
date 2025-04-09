@@ -7,18 +7,25 @@ services:
       - "160:160"
     environment:
       - FLASK_APP=app.py
-      - FLASK_ENV=production
-      - EMAIL_HOST=mailu.pantech.solutions
-      - EMAIL_PORT=587
-      - EMAIL_USER=info@pantech.solutions
-      - EMAIL_PASSWORD=i3071948
-      - EMAIL_USE_TLS=True
+      - FLASK_DEBUG=0
+      - DATABASE_URL=postgresql://pantech:i3OH`vY,(e1*Wg=9St@db:5432/pantech
     volumes:
       - ./app:/app
+    depends_on:
+      - db
     restart: unless-stopped
-    networks:
-      - pantech-network
 
-networks:
-  pantech-network:
-    driver: bridge
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=pantech
+      - POSTGRES_PASSWORD=i3OH`vY,(e1*Wg=9St
+      - POSTGRES_DB=pantech
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5430:5432"
+    restart: always
+
+volumes:
+  postgres_data:
