@@ -10,6 +10,8 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    volumes:
+      - uploads_data:/pantech/uploads
 
   db:
     image: postgres:latest
