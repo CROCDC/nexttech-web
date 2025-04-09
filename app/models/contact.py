@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import db
+from app.factory import db
 
 class ContactMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
