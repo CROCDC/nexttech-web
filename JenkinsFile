@@ -12,7 +12,7 @@ pipeline {
                 sh '''
                     docker compose down
                     docker compose up -d --build
-                    sleep 10
+                    sleep 1
                     docker compose exec db pg_isready -U postgres
                     docker compose exec web flask db upgrade
                 '''
