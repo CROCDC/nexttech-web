@@ -12,9 +12,20 @@ pipeline {
                 sh '''
                     docker compose down || true
                     docker compose up -d --build
-                    sleep 10
-                    docker compose exec db pg_isready -U pantech || exit 1
-                    docker compose exec web flask db upgrade || exit 1
+                    
+                    # Esperar a que la base de datos esté lista
+                    for i in {1..30}; do
+                        if docker compose exec db pg_isready -U pantech; then
+                            break
+                        fi
+                        sleep 1
+                    done
+                    
+                    # Ejecutar migraciones
+                    docker compose exec web flask db upgrade
+                    
+                    # Verificar que la tabla existe
+                    docker compose exec db psql -U pantech -d pantech -c "\\dt job_applications" || exit 1
                 '''
             }
         }
