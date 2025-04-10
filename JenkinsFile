@@ -21,11 +21,14 @@ pipeline {
                         sleep 1
                     done
                     
-                    # Ejecutar migraciones
+                    # Verificar estado de las migraciones
+                    docker compose exec web flask db current
+                    
+                    # Ejecutar migraciones pendientes
                     docker compose exec web flask db upgrade
                     
-                    # Verificar que la tabla existe
-                    docker compose exec db psql -U pantech -d pantech -c "\\dt job_applications" || exit 1
+                    # Verificar que las tablas existen
+                    docker compose exec db psql -U pantech -d pantech -c "\\dt" || exit 1
                 '''
             }
         }
