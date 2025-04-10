@@ -10,11 +10,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    docker compose down
+                    docker compose down || true
                     docker compose up -d --build
-                    sleep 1
-                    docker compose exec db pg_isready -U postgres
-                    docker compose exec web flask db upgrade
+                    sleep 10
+                    docker compose exec db pg_isready -U pantech || exit 1
+                    docker compose exec web flask db upgrade || exit 1
                 '''
             }
         }
@@ -22,8 +22,10 @@ pipeline {
 
     post {
         failure {
-            sh 'docker compose logs web db'
-            echo 'Pipeline falló'
+            sh '''
+                docker compose logs web
+                docker compose logs db
+            '''
         }
         always {
             cleanWs()
