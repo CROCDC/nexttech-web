@@ -25,10 +25,10 @@ def create_app():
     # Inicializar extensiones
     db.init_app(app)
     migrate.init_app(app, db)
-    
-    # Registrar rutas
+
     with app.app_context():
         from app.routes import register_routes
         register_routes(app)
+        db.create_all()
     
     return app 

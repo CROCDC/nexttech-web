@@ -12,24 +12,7 @@ pipeline {
                 sh '''
                     docker compose down || true
                     docker compose up -d --build
-                    
-                    # Esperar a que la base de datos esté lista
-                    for i in {1..30}; do
-                        if docker compose exec db pg_isready -U pantech; then
-                            break
-                        fi
-                        sleep 1
-                    done
-                    
-                    # Verificar estado de las migraciones
-                    docker compose exec web flask db current
-                    
-                    # Ejecutar migraciones pendientes
-                    docker compose exec web flask db upgrade
-                    
-                    # Verificar que las tablas existen
-                    docker compose exec db psql -U pantech -d pantech -c "\\dt" || exit 1
-                '''
+                   '''
             }
         }
     }
@@ -39,7 +22,7 @@ pipeline {
             sh '''
                 docker compose logs web
                 docker compose logs db
-            '''
+               '''
         }
         always {
             cleanWs()
