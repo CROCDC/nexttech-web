@@ -8,6 +8,9 @@ from app.factory import db
 from app.models import JobApplication
 from app.repositories.contact_repository import ContactMessageRepository
 from app.repositories.job_application_repository import JobApplicationRepository
+from app.repositories.job_opening_repository import JobOpeningRepository
+from app.models.job_opening import JobTypeEnum
+
 
 def register_routes(app):
     @app.route('/')
@@ -39,7 +42,8 @@ def register_routes(app):
 
     @app.route('/work-with-us')
     def work_with_us():
-        return render_template('work_with_us.html')
+        job_openings = JobOpeningRepository.get_all()
+        return render_template('work_with_us.html', job_openings=job_openings, JobTypeEnum=JobTypeEnum)
 
 
     @app.route('/submit-application', methods=['POST'])

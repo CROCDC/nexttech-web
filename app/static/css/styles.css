@@ -751,3 +751,35 @@ footer {
     color: #004085;
     border-left: 4px solid #0dcaf0;
 }
+
+.carousel-item-content {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.carousel-item-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.job-icon {
+    font-size: 3rem;
+    color: #4299e1;
+    margin-bottom: 1rem;
+}
+
+.carousel-item h3 {
+    font-size: 1.5rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.carousel-item p {
+    color: #4a5568;
+    font-size: 1rem;
+    line-height: 1.5;
+}
