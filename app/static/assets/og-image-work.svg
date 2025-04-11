@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fondo con gradiente -->
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+        </linearGradient>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+    </defs>
+    
+    <!-- Fondo -->
+    <rect width="1200" height="630" fill="url(#bgGradient)" />
+    
+    <!-- Patrón de fondo -->
+    <g opacity="0.1">
+        <path d="M0 0h1200v630H0z" fill="url(#bgGradient)" />
+        <circle cx="300" cy="150" r="100" fill="#4299e1" opacity="0.1" />
+        <circle cx="900" cy="480" r="150" fill="#4299e1" opacity="0.1" />
+    </g>
+    
+    <!-- Logo y texto -->
+    <g transform="translate(100, 200)">
+        <!-- Logo -->
+        <g transform="scale(2)">
+            <path d="M20 10h-4v4h-4v-4H8v-4h4V2h4v4h4v4z" fill="#4299e1" />
+            <path d="M20 30h-4v4h-4v-4H8v-4h4v-4h4v4h4v4z" fill="#4299e1" />
+            <path d="M20 50h-4v4h-4v-4H8v-4h4v-4h4v4h4v4z" fill="#4299e1" />
+        </g>
+        
+        <!-- Texto -->
+        <text x="60" y="30" font-family="Arial, sans-serif" font-size="48" fill="white" font-weight="bold">
+            Pantech
+        </text>
+        <text x="60" y="80" font-family="Arial, sans-serif" font-size="24" fill="#94a3b8">
+            Trabaja con Nosotros
+        </text>
+        <text x="60" y="120" font-family="Arial, sans-serif" font-size="18" fill="#94a3b8">
+            Únete a nuestro equipo y forma parte de proyectos innovadores
+        </text>
+    </g>
+</svg> 
