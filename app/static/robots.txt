@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /static/
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://pantech.solutions/sitemap.xml 
