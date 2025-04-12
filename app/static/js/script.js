@@ -347,6 +347,132 @@ function initPerformanceOptimizations() {
     }
 }
 
+// Función para inicializar el carrusel de equipo
+function initTeamCarousel() {
+    const teamCarousel = document.querySelector('.team-carousel');
+    const teamSlides = document.querySelectorAll('.team-slide');
+    const prevButton = document.querySelector('.team-container .carousel-button.prev');
+    const nextButton = document.querySelector('.team-container .carousel-button.next');
+
+    if (!teamCarousel || !teamSlides.length || !prevButton || !nextButton) {
+        console.warn('Elementos del carrusel de equipo no encontrados');
+        return;
+    }
+
+    let currentTeamSlide = 0;
+    let isAnimating = false;
+    let teamAutoplayInterval = null;
+
+    function scrollToSlide(index) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const slideWidth = teamSlides[0].offsetWidth;
+        const gap = parseInt(window.getComputedStyle(teamCarousel).gap);
+        const scrollPosition = index * (slideWidth + gap);
+
+        teamCarousel.scrollTo({
+            left: scrollPosition,
+            behavior: 'smooth'
+        });
+
+        currentTeamSlide = index;
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, 500);
+    }
+
+    function nextTeamSlide() {
+        if (isAnimating) return;
+        const nextIndex = (currentTeamSlide + 1) % teamSlides.length;
+        scrollToSlide(nextIndex);
+    }
+
+    function prevTeamSlide() {
+        if (isAnimating) return;
+        const prevIndex = (currentTeamSlide - 1 + teamSlides.length) % teamSlides.length;
+        scrollToSlide(prevIndex);
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide();
+        teamAutoplayInterval = setInterval(nextTeamSlide, 5000);
+    }
+
+    function stopAutoSlide() {
+        if (teamAutoplayInterval) {
+            clearInterval(teamAutoplayInterval);
+            teamAutoplayInterval = null;
+        }
+    }
+
+    // Event listeners
+    prevButton.addEventListener('click', prevTeamSlide);
+    nextButton.addEventListener('click', nextTeamSlide);
+
+    // Pausar autoplay al interactuar
+    teamCarousel.addEventListener('mouseenter', stopAutoSlide);
+    teamCarousel.addEventListener('mouseleave', startAutoSlide);
+    teamCarousel.addEventListener('touchstart', stopAutoSlide);
+    teamCarousel.addEventListener('touchend', startAutoSlide);
+
+    // Inicializar el carrusel
+    function initCarousel() {
+        // Verificar que todas las imágenes estén cargadas
+        const images = teamCarousel.querySelectorAll('img');
+        let loadedImages = 0;
+        let hasErrors = false;
+
+        images.forEach(img => {
+            if (img.complete) {
+                if (img.naturalWidth === 0) {
+                    hasErrors = true;
+                    console.warn('Error al cargar imagen:', img.src);
+                    const originalSrc = img.src;
+                    img.src = originalSrc;
+                }
+                loadedImages++;
+            } else {
+                img.addEventListener('load', () => {
+                    loadedImages++;
+                    checkInit();
+                });
+                img.addEventListener('error', () => {
+                    hasErrors = true;
+                    console.warn('Error al cargar imagen:', img.src);
+                    const originalSrc = img.src;
+                    img.src = originalSrc;
+                    loadedImages++;
+                    checkInit();
+                });
+            }
+        });
+
+        function checkInit() {
+            if (loadedImages === images.length) {
+                if (hasErrors) {
+                    console.warn('Algunas imágenes no se cargaron correctamente');
+                }
+                currentTeamSlide = 0;
+                scrollToSlide(0);
+                startAutoSlide();
+            }
+        }
+
+        if (images.length === 0) {
+            currentTeamSlide = 0;
+            scrollToSlide(0);
+            startAutoSlide();
+        } else {
+            checkInit();
+        }
+    }
+
+    // Inicializar el carrusel
+    initCarousel();
+}
+
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     initServicesCarousel();
@@ -354,4 +480,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimation();
     initContactForm();
     initPerformanceOptimizations();
+    initTeamCarousel();
 }); 
