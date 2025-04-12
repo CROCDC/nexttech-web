@@ -811,7 +811,7 @@ footer {
 
 /* Estilos para el carrusel de equipo */
 .team-carousel-section {
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
     background-color: var(--light-bg);
     text-align: center;
     position: relative;

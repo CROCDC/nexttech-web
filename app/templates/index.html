@@ -141,30 +141,30 @@
                 </button>
                 <div class="team-carousel">
                     <div class="team-slide animate__animated animate__fadeIn">
-                        <img src="/static/assets/team/team_web.jpg" 
+                        <img src="{{ url_for('static', filename='assets/team/team_web.jpg') }}" 
                              alt="Equipo trabajando en desarrollo web" 
                              loading="lazy" 
-                             onerror="this.onerror=null; this.src='/static/assets/team/team_web.jpg'; this.alt='Imagen no disponible'">
+                             onerror="this.onerror=null; this.src='{{ url_for('static', filename='assets/team/team_web.jpg') }}'; this.alt='Imagen no disponible'">
                         <div class="team-caption">
                             <h3>Desarrollo Web</h3>
                             <p>Nuestro equipo creando soluciones digitales innovadoras</p>
                         </div>
                     </div>
                     <div class="team-slide animate__animated animate__fadeIn">
-                        <img src="/static/assets/team/team_ia.png" 
+                        <img src="{{ url_for('static', filename='assets/team/team_ia.png') }}" 
                              alt="Equipo trabajando en inteligencia artificial" 
                              loading="lazy" 
-                             onerror="this.onerror=null; this.src='/static/assets/team/team_ia.png'; this.alt='Imagen no disponible'">
+                             onerror="this.onerror=null; this.src='{{ url_for('static', filename='assets/team/team_ia.png') }}'; this.alt='Imagen no disponible'">
                         <div class="team-caption">
                             <h3>Inteligencia Artificial</h3>
                             <p>Desarrollando soluciones de IA para el futuro</p>
                         </div>
                     </div>
                     <div class="team-slide animate__animated animate__fadeIn">
-                        <img src="/static/assets/team/team_android.png" 
+                        <img src="{{ url_for('static', filename='assets/team/team_android.png') }}" 
                              alt="Equipo trabajando en aplicaciones móviles" 
                              loading="lazy" 
-                             onerror="this.onerror=null; this.src='/static/assets/team/team_android.png'; this.alt='Imagen no disponible'">
+                             onerror="this.onerror=null; this.src='{{ url_for('static', filename='assets/team/team_android.png') }}'; this.alt='Imagen no disponible'">
                         <div class="team-caption">
                             <h3>Aplicaciones Móviles</h3>
                             <p>Creando experiencias móviles excepcionales</p>
