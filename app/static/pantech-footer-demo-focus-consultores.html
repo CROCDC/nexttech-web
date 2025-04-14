@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Consultores PR - Footer Demo</title>
+    <style>
+        :root {
+            --global-palette1: #2B6CB0;
+            --global-palette2: #215387;
+            --global-palette3: #1A202C;
+            --global-palette4: #2D3748;
+            --global-palette5: #4A5568;
+            --global-palette6: #718096;
+            --global-palette7: #EDF2F7;
+            --global-palette8: #F7FAFC;
+            --global-palette9: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            background: var(--global-palette8);
+        }
+
+        .site-header {
+            background: var(--global-palette9);
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .site-title {
+            color: var(--global-palette3);
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--global-palette1), var(--global-palette2));
+            color: var(--global-palette9);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: linear-gradient(180deg, var(--global-palette8) 0%, var(--global-palette7) 100%);
+            position: relative;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://focusconsultorespr.com/wp-content/uploads/2024/01/pexels-fauxels-3184465-scaled.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.57;
+            z-index: 0;
+        }
+
+        .content-section {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--global-palette9);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: var(--global-palette3);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .section-content {
+            color: var(--global-palette4);
+            line-height: 1.6;
+        }
+
+        pantech-footer {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <h1 class="site-title">Focus Consultores PR</h1>
+    </header>
+
+    <section class="hero-section">
+        <h2 class="hero-title">Bienvenidos a Focus Consultores</h2>
+        <p class="hero-subtitle">Soluciones empresariales integrales</p>
+    </section>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <div class="section-content">
+                <p>Ofrecemos servicios profesionales de consultoría empresarial, enfocados en el crecimiento y desarrollo de su negocio.</p>
+            </div>
+        </div>
+        <script src="/static/js/pantechFooter.js"></script>
+        <pantech-footer></pantech-footer>
+    </main>
+</body>
+</html> 
