@@ -4,6 +4,7 @@ import psutil
 
 # Inicializar el exporter de Prometheus
 metrics = PrometheusMetrics(app)
+metrics.group_by = ['method', 'status', 'path']
 
 # Métricas personalizadas
 @metrics.gauge('memory_usage_bytes', 'Memory usage in bytes')
