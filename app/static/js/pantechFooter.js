@@ -40,7 +40,7 @@ class PantechFooter extends HTMLElement {
             </style>
             <div class="pantech-footer">
                 <a href="https://pantech.solutions" target="_blank" rel="noopener noreferrer">
-                    <img src="/static/assets/favicon.svg" alt="Pantech Logo">
+                    <img src="https://pantech.solutions/static/assets/favicon.svg" alt="Pantech Logo">
                     <span>Creado por Pantech Solutions</span>
                 </a>
             </div>
