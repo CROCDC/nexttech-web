@@ -30,6 +30,7 @@
     <!-- Precargar recursos críticos -->
     <link rel="preload" href="{{ url_for('static', filename='css/styles.css') }}?v=1.0.2" as="style">
     <link rel="preload" href="{{ url_for('static', filename='js/script.js') }}?v=1.0.6" as="script">
+    <link rel="preload" href="{{ url_for('static', filename='js/analytics.js') }}" as="script">
     
     <!-- Preconexiones -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -244,5 +245,6 @@
     </style>
 
     <script src="{{ url_for('static', filename='js/script.js') }}?v=1.0.6" defer></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}" defer></script>
 </body>
 </html> 
