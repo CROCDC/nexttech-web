@@ -39,6 +39,7 @@
     <!-- Recursos estáticos -->
     <link rel="canonical" href="https://pantech.solutions">
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='assets/favicon.svg') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/apple-touch-icon.png') }}">
@@ -64,11 +65,11 @@
                 <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
             <ul class="nav-links">
-                <li><a href="#inicio" aria-current="page">Inicio</a></li>
-                <li><a href="#servicios">Servicios</a></li>
-                <li><a href="#proyectos">Proyectos</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-                <li><a href="/work-with-us" class="work-with-us-btn">Trabaja con Nosotros</a></li>
+                <li><a href="#inicio" aria-current="page" title="Ir a la sección de inicio">Inicio</a></li>
+                <li><a href="#servicios" title="Ir a la sección de servicios">Servicios</a></li>
+                <li><a href="#proyectos" title="Ir a la sección de proyectos">Proyectos</a></li>
+                <li><a href="#contacto" title="Ir a la sección de contacto">Contacto</a></li>
+                <li><a href="/work-with-us" class="work-with-us-btn" title="Ver oportunidades de trabajo">Trabaja con Nosotros</a></li>
             </ul>
         </nav>
     </header>
@@ -220,7 +221,7 @@
     <footer>
         <div class="footer-content">
             <div class="social-media">
-                <a href="https://www.instagram.com/pan__tech/" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Instagram">
+                <a href="https://www.instagram.com/pan__tech/" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Instagram" title="Seguir a Pantech Solutions en Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
             </div>
