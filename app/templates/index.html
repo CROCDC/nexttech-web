@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pantech Solutions - Software Factory líder en desarrollo de soluciones digitales, aplicaciones web, móviles, IA y consultoría tecnológica para empresas en Argentina.">
+    <meta name="description" content="Descubre cómo Pantech Solutions, Software Factory líder en Argentina, desarrolla soluciones digitales innovadoras para impulsar tu negocio. ¡Contáctanos!">
     <meta name="keywords" content="pantech solutions, pantech, software factory, desarrollo web, aplicaciones móviles, inteligencia artificial, consultoría tecnológica, cloud solutions, bases de datos, ciberseguridad, argentina">
     <meta name="author" content="Pantech Solutions">
     <meta name="robots" content="index, follow">
@@ -25,7 +25,7 @@
     <meta name="twitter:description" content="Transformamos ideas en soluciones digitales innovadoras para impulsar tu negocio al siguiente nivel.">
     <meta name="twitter:image" content="https://pantech.solutions/static/assets/og-image.png">
     <meta name="twitter:site" content="@pantech">
-    <title>Pantech Solutions | Software Factory - Desarrollo de Soluciones Digitales</title>
+    <title>Pantech Solutions | Software Factory Líder en Argentina - Desarrollo Web y Apps</title>
     
     <!-- Precargar recursos críticos -->
     <link rel="preload" href="{{ url_for('static', filename='css/styles.css') }}?v=1.0.2" as="style">
@@ -54,6 +54,35 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </noscript>
+
+    <script src="{{ url_for('static', filename='js/analytics.js') }}" defer></script>
+    
+    <!-- Microdatos Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Pantech Solutions",
+        "url": "https://pantech.solutions",
+        "logo": "https://pantech.solutions/static/assets/favicon.png",
+        "description": "Software Factory líder en Argentina especializada en desarrollo de soluciones digitales innovadoras",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "AR"
+        },
+        "sameAs": [
+            "https://www.instagram.com/pan__tech/"
+        ],
+        "offers": {
+            "@type": "Offer",
+            "itemOffered": {
+                "@type": "Service",
+                "name": "Desarrollo de Software",
+                "description": "Desarrollo de soluciones digitales a medida, aplicaciones web, móviles e IA"
+            }
+        }
+    }
+    </script>
 </head>
 <body>
     <header class="header">
@@ -96,54 +125,54 @@
                     <i class="fas fa-chevron-left" aria-hidden="true"></i>
                 </button>
                 <div class="services-carousel">
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-brain" aria-hidden="true"></i>
                         </div>
-                        <h3>Inteligencia Artificial</h3>
-                        <p>Soluciones basadas en IA y Machine Learning</p>
+                        <h3 itemprop="name">Inteligencia Artificial</h3>
+                        <p itemprop="description">Soluciones basadas en IA y Machine Learning</p>
                     </div>
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-laptop-code" aria-hidden="true"></i>
                         </div>
-                        <h3>Desarrollo Web</h3>
-                        <p>Sitios web modernos y responsivos</p>
+                        <h3 itemprop="name">Desarrollo Web</h3>
+                        <p itemprop="description">Sitios web modernos y responsivos</p>
                     </div>
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-mobile-alt" aria-hidden="true"></i>
                         </div>
-                        <h3>Aplicaciones Móviles</h3>
-                        <p>Apps nativas e híbridas</p>
+                        <h3 itemprop="name">Aplicaciones Móviles</h3>
+                        <p itemprop="description">Apps nativas e híbridas</p>
                     </div>
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-lightbulb" aria-hidden="true"></i>
                         </div>
-                        <h3>Consultoría</h3>
-                        <p>Asesoramiento tecnológico</p>
+                        <h3 itemprop="name">Consultoría</h3>
+                        <p itemprop="description">Asesoramiento tecnológico</p>
                     </div>
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-cloud" aria-hidden="true"></i>
                         </div>
-                        <h3>Cloud Solutions</h3>
-                        <p>Servicios en la nube y DevOps</p>
+                        <h3 itemprop="name">Cloud Solutions</h3>
+                        <p itemprop="description">Servicios en la nube y DevOps</p>
                     </div>
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-database" aria-hidden="true"></i>
                         </div>
-                        <h3>Bases de Datos</h3>
-                        <p>Diseño y optimización</p>
+                        <h3 itemprop="name">Bases de Datos</h3>
+                        <p itemprop="description">Diseño y optimización</p>
                     </div>
-                    <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-card animate__animated animate__fadeInUp" itemscope itemtype="https://schema.org/Service">
                         <div class="service-icon">
                             <i class="fas fa-shield-alt" aria-hidden="true"></i>
                         </div>
-                        <h3>Ciberseguridad</h3>
-                        <p>Protección y seguridad digital</p>
+                        <h3 itemprop="name">Ciberseguridad</h3>
+                        <p itemprop="description">Protección y seguridad digital</p>
                     </div>
                 </div>
                 <button class="carousel-button next" aria-label="Siguiente">
@@ -196,7 +225,7 @@
             </div>
         </section>
 
-        <section id="contacto" class="contact" aria-labelledby="contacto-titulo">
+        <section id="contacto" class="contact" aria-labelledby="contacto-titulo" itemscope itemtype="https://schema.org/ContactPoint">
             <h2 id="contacto-titulo" class="animate__animated animate__fadeIn">Contáctanos</h2>
             <form class="contact-form animate__animated animate__fadeInUp" action="#" method="POST">
                 <div class="form-group">
@@ -247,6 +276,5 @@
     </style>
 
     <script src="{{ url_for('static', filename='js/script.js') }}?v=1.0.6" defer></script>
-    <script src="{{ url_for('static', filename='js/analytics.js') }}" defer></script>
 </body>
 </html> 
