@@ -532,7 +532,7 @@
                         <div class="carousel-item {% if loop.first %}active{% endif %}">
                             <div class="service-card animate__animated animate__fadeInUp">
                                 <div class="service-icon">
-                                    <img src="{{ url_for('static', filename='assets/icons/' + job.job_type.icon) }}" alt="{{ job.job_type.label }} icon" class="job-icon">
+                                    <img src="{{ url_for('static', filename='assets/icons/' + job.job_type.icon) }}" alt="{{ job.job_type.label }} icon" class="job-icon" loading="lazy">
                                 </div>
                                 <h3>{{ job.title }}</h3>
                                 <p>{{ job.description }}</p>
