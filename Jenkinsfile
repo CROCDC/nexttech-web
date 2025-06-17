@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'pantechsolutions-web'
+        DOCKER_IMAGE = 'pantech-web'
         DOCKER_TAG = 'latest'
     }
 
@@ -14,14 +14,21 @@ pipeline {
             }
         }
 
+        stage('Debug workspace') {
+            steps {
+                sh 'pwd && echo "Contenido:" && ls -l && echo "Dockerfile:" && cat Dockerfile'
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh '''
                     docker compose down --remove-orphans || true
-                    docker rmi pantechsolutions-web:latest || true
+                    docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true
+                    docker builder prune -af || true
                     docker compose build --no-cache
                     docker compose up -d
-                   '''
+                '''
             }
         }
     }
@@ -29,9 +36,9 @@ pipeline {
     post {
         failure {
             sh '''
-                docker compose logs web
-                docker compose logs db
-               '''
+                docker compose logs web || true
+                docker compose logs db || true
+            '''
         }
         always {
             cleanWs()
