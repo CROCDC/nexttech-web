@@ -10,8 +10,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    docker compose down || true
-                    docker compose up -d --build
+                    docker compose down --remove-orphans || true
+                    docker rmi pantech-web:latest || true
+                    docker compose build --no-cache
+                    docker compose up -d
                    '''
             }
         }
