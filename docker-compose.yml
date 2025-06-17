@@ -27,7 +27,7 @@ services:
     image: postgres:latest
     environment:
       - POSTGRES_USER=pantech
-      - POSTGRES_PASSWORD=RUNSUMnimObjEWerManSIAHORpHicaT
+      - POSTGRES_PASSWORD=RUNSUMnimObjEWerManSIAHORpHicaTt
       - POSTGRES_DB=pantech
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -40,7 +40,7 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     environment:
-      - DATA_SOURCE_NAME=postgresql://pantech:RUNSUMnimObjEWerManSIAHORpHicaT@db:5432/pantech?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://pantech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/pantech?sslmode=disable
     ports:
       - "9187:9187"
     depends_on:
