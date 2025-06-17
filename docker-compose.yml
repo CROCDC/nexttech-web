@@ -1,18 +1,24 @@
 services:
   web:
     build: .
-    ports:
-      - "160:160"
     environment:
       - FLASK_APP=run.py
       - FLASK_DEBUG=0
       - DATABASE_URL=postgresql://pantech:i3OH`vY,(e1*Wg=9St@db:5432/pantech
       - UPLOAD_FOLDER=/pantech/uploads
+      - VIRTUAL_HOST=pantech.solutions
+      - VIRTUAL_PORT=160
+      - LETSENCRYPT_HOST=pantech.solutions
+      - LETSENCRYPT_EMAIL=admin@pantech.solutions
+    expose:
+      - "160"
     depends_on:
       - db
     restart: unless-stopped
     volumes:
       - uploads_data:/pantech/uploads
+    networks:
+      - proxy
 
   db:
     image: postgres:latest
@@ -25,6 +31,8 @@ services:
     ports:
       - "5430:5432"
     restart: always
+    networks:
+      - proxy
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
@@ -45,6 +53,10 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: unless-stopped
+
+networks:
+  proxy:
+    external: true
 
 volumes:
   postgres_data:
