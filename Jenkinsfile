@@ -6,6 +6,13 @@ pipeline {
         DOCKER_TAG = 'latest'
     }
 
+    stage('Checkout limpio') {
+        steps {
+            deleteDir()
+            checkout scm
+        }
+    }
+
     stages {
         stage('Deploy') {
             steps {
