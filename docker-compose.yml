@@ -1,5 +1,6 @@
 services:
   web:
+    image: pantech-web
     build: .
     environment:
       - FLASK_APP=run.py
