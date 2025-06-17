@@ -13,6 +13,17 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Debug workspace') {
+  steps {
+    sh '''
+      echo "PWD actual: $(pwd)"
+      echo "Contenido:"
+      ls -l
+      echo "Dockerfile:"
+      cat Dockerfile
+    '''
+  }
+}
         stage('Deploy') {
             steps {
                 sh '''
