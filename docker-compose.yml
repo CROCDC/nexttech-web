@@ -7,7 +7,7 @@ services:
     environment:
       - FLASK_APP=run.py
       - FLASK_DEBUG=0
-      - DATABASE_URL=postgresql://pantech:i3OH`vY,(e1*Wg=9St@db:5432/pantech
+      - DATABASE_URL=postgresql://pantech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/pantech
       - UPLOAD_FOLDER=/pantech/uploads
       - VIRTUAL_HOST=pantech.solutions
       - VIRTUAL_PORT=160
@@ -27,7 +27,7 @@ services:
     image: postgres:latest
     environment:
       - POSTGRES_USER=pantech
-      - POSTGRES_PASSWORD=i3OH`vY,(e1*Wg=9St
+      - POSTGRES_PASSWORD=RUNSUMnimObjEWerManSIAHORpHicaT
       - POSTGRES_DB=pantech
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -40,7 +40,7 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     environment:
-      - DATA_SOURCE_NAME=postgresql://pantech:i3OH`vY,(e1*Wg=9St@db:5432/pantech?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://pantech:RUNSUMnimObjEWerManSIAHORpHicaT@db:5432/pantech?sslmode=disable
     ports:
       - "9187:9187"
     depends_on:
