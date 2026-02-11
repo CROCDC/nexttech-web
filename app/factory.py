@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -19,9 +20,13 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Configuración de uploads
-    app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
+    app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER') or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance', 'uploads')
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
+    @app.context_processor
+    def inject_current_year():
+        return {'current_year': datetime.now().year}
+
     # Inicializar extensiones
     db.init_app(app)
     migrate.init_app(app, db)

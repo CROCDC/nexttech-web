@@ -47,6 +47,10 @@ def register_routes(app):
                 'message': str(e)
             }), 500
 
+    @app.route('/projects')
+    def projects():
+        return render_template('projects.html')
+
     @app.route('/work-with-us')
     def work_with_us():
         job_openings = JobOpeningRepository.get_all()

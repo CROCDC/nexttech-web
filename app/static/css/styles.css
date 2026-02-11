@@ -383,6 +383,93 @@ body {
     }
 }
 
+/* Proyectos */
+.projects {
+    padding: 4rem 2rem;
+    background-color: var(--white);
+    text-align: center;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background: var(--light-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: var(--text-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.project-card .project-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.project-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.project-card p {
+    font-size: 0.95rem;
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.project-card .project-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.project-card:hover .project-link {
+    text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+}
+
 /* Formulario de contacto */
 .contact {
     padding: 5rem 2rem;
@@ -491,7 +578,7 @@ footer {
         font-size: 2.5rem;
     }
     
-    .services h2, .contact h2 {
+    .services h2, .projects h2, .contact h2 {
         font-size: 2rem;
     }
 }
@@ -584,11 +671,11 @@ footer {
         font-size: 0.9rem;
     }
     
-    .services, .contact {
+    .services, .projects, .contact {
         padding: 3rem 1rem;
     }
     
-    .services h2, .contact h2 {
+    .services h2, .projects h2, .contact h2 {
         font-size: 1.8rem;
         margin-bottom: 2rem;
     }
