@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -25,6 +26,10 @@ def create_app():
     # Inicializar extensiones
     db.init_app(app)
     migrate.init_app(app, db)
+
+    @app.context_processor
+    def inject_current_year():
+        return {'current_year': datetime.now().year}
 
     with app.app_context():
         from app.routes import register_routes
