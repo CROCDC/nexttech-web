@@ -31,6 +31,10 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
+    @app.context_processor
+    def inject_current_year():
+        return {'current_year': datetime.now().year}
+
     with app.app_context():
         from app.routes import register_routes
         register_routes(app)
