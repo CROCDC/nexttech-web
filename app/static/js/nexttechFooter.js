@@ -40,8 +40,8 @@ class NexttechFooter extends HTMLElement {
             </style>
             <div class="nexttech-footer">
                 <a href="https://nexttech.com.ar" target="_blank" rel="noopener noreferrer">
-                    <img src="https://nexttech.com.ar/static/assets/favicon.svg" alt="Nexttech Logo">
-                    <span>Creado por Nexttech</span>
+                    <img src="https://nexttech.com.ar/static/assets/favicon.svg" alt="Next Tech Logo">
+                    <span>Creado por Next Tech</span>
                 </a>
             </div>
         `;
