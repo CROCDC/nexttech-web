@@ -19,6 +19,6 @@ RUN mkdir -p /nexttech/uploads/cv && chmod 777 /nexttech/uploads/cv
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=production
 
-EXPOSE 160
+EXPOSE 7001
 ENTRYPOINT []
-CMD ["flask", "run", "--host=0.0.0.0", "--port=160"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=7001"]

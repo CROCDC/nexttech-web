@@ -25,5 +25,5 @@ jobs:
 
           # POST to trigger the job (nexttech-web)
           curl -b cookie.txt -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
-            --data "" "https://jenkins.pantech.solutions/job/nexttech-web/build?token=${{ secrets.JENKINS_API_TOKEN }}" \
+            --data "" "https://jenkins.pantech.solutions/job/nexttech-web-prod/build?token=${{ secrets.JENKINS_API_TOKEN }}" \
             --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_PASSWORD }}"
