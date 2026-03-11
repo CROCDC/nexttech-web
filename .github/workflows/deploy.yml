@@ -40,6 +40,11 @@ jobs:
           echo "Using header: $CRUMB_HEADER"
 
           # POST to trigger the job
-          curl -b cookie.txt -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
+          TRIGGER_CODE=$(curl -b cookie.txt -s -o /dev/null -w "%{http_code}" -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
             --data "" "https://jenkins.pantech.solutions/job/$JOB_NAME/build?token=$JENKINS_API_TOKEN" \
-            --user "$JENKINS_USER:$JENKINS_PASSWORD"
+            --user "$JENKINS_USER:$JENKINS_PASSWORD")
+          if [ "$TRIGGER_CODE" != "201" ] && [ "$TRIGGER_CODE" != "200" ]; then
+            echo "::error::Jenkins trigger failed (HTTP $TRIGGER_CODE). Check JOB_NAME ($JOB_NAME), token, and job exists."
+            exit 1
+          fi
+          echo "Triggered Jenkins job (HTTP $TRIGGER_CODE)."

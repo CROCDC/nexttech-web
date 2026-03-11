@@ -19,7 +19,8 @@ services:
     expose:
       - "7001"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: unless-stopped
     volumes:
       - uploads_data:/nexttech/uploads
@@ -38,6 +39,11 @@ services:
     ports:
       - "5430:5432"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexttech -d nexttech"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - proxy
 
