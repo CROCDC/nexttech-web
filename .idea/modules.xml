@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pantech.solutions.iml" filepath="$PROJECT_DIR$/.idea/pantech.solutions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/nexttech-web.iml" filepath="$PROJECT_DIR$/.idea/nexttech-web.iml" />
     </modules>
   </component>
 </project>

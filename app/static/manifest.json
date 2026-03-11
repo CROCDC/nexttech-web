@@ -1,6 +1,6 @@
 {
-    "name": "Pantech Solutions",
-    "short_name": "Pantech",
+    "name": "Nexttech",
+    "short_name": "Nexttech",
     "description": "Software Factory líder en desarrollo de soluciones digitales",
     "start_url": "/",
     "display": "standalone",
@@ -18,4 +18,4 @@
             "type": "image/png"
         }
     ]
-} 
+}

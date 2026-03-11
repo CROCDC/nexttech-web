@@ -16,7 +16,7 @@ def create_app():
     app = Flask(__name__)
     
     # Configuración de la base de datos
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///pantech.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///nexttech.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Configuración de uploads

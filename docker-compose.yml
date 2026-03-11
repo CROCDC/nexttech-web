@@ -1,34 +1,38 @@
 services:
   web:
-    image: pantech-web
+    container_name: nexttech-web-app
+    image: nexttech-web
     build:
       context: .
       dockerfile: Dockerfile
     environment:
       - FLASK_APP=run.py
       - FLASK_DEBUG=0
-      - DATABASE_URL=postgresql://pantech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/pantech
-      - UPLOAD_FOLDER=/pantech/uploads
-      - VIRTUAL_HOST=pantech.solutions
-      - VIRTUAL_PORT=160
-      - LETSENCRYPT_HOST=pantech.solutions
-      - LETSENCRYPT_EMAIL=admin@pantech.solutions
+      - DATABASE_URL=postgresql://nexttech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/nexttech
+      - UPLOAD_FOLDER=/nexttech/uploads
+      - VIRTUAL_HOST=nexttech.com.ar
+      - VIRTUAL_PORT=7001
+      - LETSENCRYPT_HOST=nexttech.com.ar
+      - LETSENCRYPT_EMAIL=admin@nexttech.com.ar
+    ports:
+      - "7001:7001"
     expose:
-      - "160"
+      - "7001"
     depends_on:
       - db
     restart: unless-stopped
     volumes:
-      - uploads_data:/pantech/uploads
+      - uploads_data:/nexttech/uploads
     networks:
       - proxy
 
   db:
+    container_name: nexttech-web-db
     image: postgres:latest
     environment:
-      - POSTGRES_USER=pantech
+      - POSTGRES_USER=nexttech
       - POSTGRES_PASSWORD=RUNSUMnimObjEWerManSIAHORpHicaTt
-      - POSTGRES_DB=pantech
+      - POSTGRES_DB=nexttech
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -40,7 +44,7 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     environment:
-      - DATA_SOURCE_NAME=postgresql://pantech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/pantech?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://nexttech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/nexttech?sslmode=disable
     ports:
       - "9187:9187"
     depends_on:

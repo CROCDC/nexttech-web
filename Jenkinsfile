@@ -1,48 +1,48 @@
 pipeline {
-    agent any
+  agent any
 
-    environment {
-        DOCKER_IMAGE = 'pantech-web'
-        DOCKER_TAG = 'latest'
+  environment {
+    COMPOSE_FILE = 'docker-compose.yml'
+    DOCKER_IMAGE = 'nexttech-web'
+  }
+
+  stages {
+    stage('Parse Commit Message') {
+      steps {
+        script {
+          def commitMessage = sh(returnStdout: true, script: "git log -1 --pretty=%B").trim()
+          env.FORCE_REBUILD = commitMessage.contains("FORCE_REBUILD") ? "true" : "false"
+          env.FULL_CLEAN = commitMessage.contains("FULL_CLEAN") ? "true" : "false"
+        }
+      }
     }
 
-    stages {
-        stage('Checkout limpio') {
-            steps {
-                deleteDir()
-                checkout scm
-            }
+    stage('Clean') {
+      when {
+        expression { return env.FORCE_REBUILD == "true" || env.FULL_CLEAN == "true" }
+      }
+      steps {
+        script {
+          def cleanCmd = "docker compose -f ${COMPOSE_FILE} down --remove-orphans"
+          if (env.FULL_CLEAN == "true") {
+            cleanCmd += " --rmi local"
+          }
+          sh "${cleanCmd} || true"
         }
-
-        stage('Debug workspace') {
-            steps {
-                sh 'pwd && echo "Contenido:" && ls -l && echo "Dockerfile:" && cat Dockerfile'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh '''
-                    docker compose down --volumes --remove-orphans || true
-                    docker volume rm $(docker volume ls -q | grep postgres_data) || true
-                    docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true
-                    docker builder prune -af || true
-                    docker compose build --no-cache
-                    docker compose up -d
-                '''
-            }
-        }
+      }
     }
 
-    post {
-        failure {
-            sh '''
-                docker compose logs web || true
-                docker compose logs db || true
-            '''
+    stage('Deploy') {
+      steps {
+        script {
+          def buildCmd = "docker compose -f ${COMPOSE_FILE} build"
+          if (env.FORCE_REBUILD == "true") {
+            buildCmd += " --no-cache"
+          }
+          sh buildCmd
         }
-        always {
-            cleanWs()
-        }
+        sh "docker compose -f ${COMPOSE_FILE} up -d"
+      }
     }
+  }
 }

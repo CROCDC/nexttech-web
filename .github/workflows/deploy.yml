@@ -1,3 +1,7 @@
+# Trigger Jenkins build on push to main.
+# JOB_NAME on Jenkins: nexttech-web (path /CursorProjects/nexttech-web).
+# Required GitHub secrets: JENKINS_USER, JENKINS_PASSWORD, JENKINS_API_TOKEN
+
 name: Deploy
 
 on:
@@ -11,14 +15,15 @@ jobs:
     steps:
       - name: Trigger Jenkins Build with cookie and crumb
         run: |
-          # Guarda la cookie y el JSON del crumb en archivos
-          curl -c cookie.txt -s "https://jenkins.pantech.solutions/crumbIssuer/api/json" --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_PASSWORD }}" -o crumb.json
-          
-          # Extrae el header del crumb usando Python
+          # Save cookie and crumb JSON
+          curl -c cookie.txt -s "https://jenkins.pantech.solutions/crumbIssuer/api/json" \
+            --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_PASSWORD }}" -o crumb.json
+
+          # Extract crumb header with Python
           CRUMB_HEADER=$(python3 -c "import json; d=json.load(open('crumb.json')); print(d['crumbRequestField'] + ': ' + d['crumb'])")
-          echo "Usando header: $CRUMB_HEADER"
-          
-          # Realiza la solicitud POST enviando la cookie y el header del crumb, usando el token API para el job
-          curl -b cookie.txt -v -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
-            --data "" "https://jenkins.pantech.solutions/job/pantech.solutions/build?token=${{ secrets.JENKINS_API_TOKEN }}" \
+          echo "Using header: $CRUMB_HEADER"
+
+          # POST to trigger the job (nexttech-web)
+          curl -b cookie.txt -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
+            --data "" "https://jenkins.pantech.solutions/job/nexttech-web/build?token=${{ secrets.JENKINS_API_TOKEN }}" \
             --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_PASSWORD }}"
