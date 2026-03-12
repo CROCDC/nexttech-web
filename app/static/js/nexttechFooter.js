@@ -7,6 +7,9 @@ class NexttechFooter extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
+                :host {
+                    background: transparent;
+                }
                 .nexttech-footer {
                     display: flex;
                     align-items: center;
@@ -15,6 +18,7 @@ class NexttechFooter extends HTMLElement {
                     font-family: Arial, sans-serif;
                     cursor: pointer;
                     transition: opacity 0.3s ease;
+                    background: transparent;
                 }
                 
                 .nexttech-footer:hover {
