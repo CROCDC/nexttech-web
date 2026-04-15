@@ -10,9 +10,9 @@ services:
       - FLASK_DEBUG=0
       - DATABASE_URL=postgresql://nexttech:RUNSUMnimObjEWerManSIAHORpHicaTt@db:5432/nexttech
       - UPLOAD_FOLDER=/nexttech/uploads
-      - VIRTUAL_HOST=nexttech.com.ar
+      - VIRTUAL_HOST=nexttech.com.ar,www.nexttech.com.ar
       - VIRTUAL_PORT=7001
-      - LETSENCRYPT_HOST=nexttech.com.ar
+      - LETSENCRYPT_HOST=nexttech.com.ar,www.nexttech.com.ar
       - LETSENCRYPT_EMAIL=admin@nexttech.com.ar
     ports:
       - "7001:7001"
