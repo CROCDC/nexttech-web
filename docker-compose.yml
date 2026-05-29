@@ -59,11 +59,12 @@ services:
     restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus:latest
+    image: nexttech-prometheus
+    build:
+      context: .
+      dockerfile: Dockerfile.prometheus
     ports:
       - "9091:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus-config/prometheus.yml:ro
     command:
       - '--config.file=/etc/prometheus-config/prometheus.yml'
     restart: unless-stopped

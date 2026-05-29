@@ -1,0 +1,6 @@
+FROM prom/prometheus:latest
+
+# Horneamos el config en la imagen en vez de bind-montar un archivo del
+# workspace. Un bind-mount de archivo único + contenedor de larga vida deja
+# el archivo montado entre builds y rompe el "wipe workspace" de Jenkins.
+COPY prometheus.yml /etc/prometheus-config/prometheus.yml
