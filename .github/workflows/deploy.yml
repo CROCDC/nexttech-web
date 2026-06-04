@@ -29,7 +29,7 @@ jobs:
           # Save cookie and crumb JSON (env vars avoid newline/special-char issues in secrets)
           curl -c cookie.txt -s -w "%{http_code}" -o crumb.json \
             --user "$JENKINS_USER:$JENKINS_PASSWORD" \
-            "https://jenkins.pantech.solutions/crumbIssuer/api/json" > http_code.txt
+            "https://jenkins.nexttech.com.ar/crumbIssuer/api/json" > http_code.txt
           HTTP_CODE=$(cat http_code.txt)
           if [ "$HTTP_CODE" != "200" ] || ! head -c1 crumb.json | grep -q '{'; then
             echo "::error::Jenkins crumb request failed (HTTP $HTTP_CODE). Check URL and credentials. Response: $(head -c 200 crumb.json)"
@@ -41,7 +41,7 @@ jobs:
 
           # POST to trigger the job
           TRIGGER_CODE=$(curl -b cookie.txt -s -o /dev/null -w "%{http_code}" -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
-            --data "" "https://jenkins.pantech.solutions/job/$JOB_NAME/build?token=$JENKINS_API_TOKEN" \
+            --data "" "https://jenkins.nexttech.com.ar/job/$JOB_NAME/build?token=$JENKINS_API_TOKEN" \
             --user "$JENKINS_USER:$JENKINS_PASSWORD")
           if [ "$TRIGGER_CODE" != "201" ] && [ "$TRIGGER_CODE" != "200" ]; then
             echo "::error::Jenkins trigger failed (HTTP $TRIGGER_CODE). Check JOB_NAME ($JOB_NAME), token, and job exists."
