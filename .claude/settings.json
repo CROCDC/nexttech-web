@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -f \"cloudflared access ssh\")",
+      "Bash(pkill -f \"ssh.*nexttech.com.ar\")"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#112240"/>
+    </linearGradient>
+    <linearGradient id="sailMain" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%"   stop-color="#f8f4ef"/>
+      <stop offset="100%" stop-color="#cce9f5"/>
+    </linearGradient>
+    <linearGradient id="sailFore" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#cce9f5"/>
+      <stop offset="100%" stop-color="#90d4ee"/>
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#00b4d8"/>
+      <stop offset="100%" stop-color="#0096b7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="32" fill="url(#bgGrad)"/>
+
+  <!-- Water / hull band -->
+  <rect x="0" y="44" width="64" height="20" fill="url(#waterGrad)" rx="0"/>
+  <clipPath id="circleClip">
+    <circle cx="32" cy="32" r="32"/>
+  </clipPath>
+  <rect x="0" y="44" width="64" height="20" fill="url(#waterGrad)" clip-path="url(#circleClip)"/>
+
+  <!-- Small wave on water -->
+  <path d="M0,46 Q16,43 32,46 Q48,49 64,46" stroke="#48cae4" stroke-width="1.2" fill="none" clip-path="url(#circleClip)" opacity="0.7"/>
+
+  <!-- Hull -->
+  <path d="M13,44 Q32,48 51,44 L47,52 L17,52 Z" fill="#0a1628" clip-path="url(#circleClip)"/>
+
+  <!-- Mast -->
+  <line x1="32" y1="44" x2="32" y2="10" stroke="#f8f4ef" stroke-width="2" clip-path="url(#circleClip)"/>
+
+  <!-- Main sail (right) -->
+  <path d="M32,10 L50,42 L32,42 Z" fill="url(#sailMain)" opacity="0.95" clip-path="url(#circleClip)"/>
+
+  <!-- Foresail (left) -->
+  <path d="M32,14 L16,42 L32,42 Z" fill="url(#sailFore)" opacity="0.85" clip-path="url(#circleClip)"/>
+
+  <!-- Coral accent — flag at top of mast -->
+  <path d="M32,10 L40,14 L32,18 Z" fill="#f4a261" clip-path="url(#circleClip)"/>
+
+  <!-- Subtle teal glow ring -->
+  <circle cx="32" cy="32" r="30.5" fill="none" stroke="#00b4d8" stroke-width="1" opacity="0.3"/>
+</svg>
