@@ -27,6 +27,7 @@ services:
       - uploads_data:/nexttech/uploads
     networks:
       - proxy
+      - internal
 
   db:
     container_name: nexttech-web-db
@@ -47,7 +48,7 @@ services:
       retries: 10
       start_period: 30s
     networks:
-      - proxy
+      - internal
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
@@ -58,6 +59,8 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    networks:
+      - internal
 
   prometheus:
     image: nexttech-prometheus
@@ -69,10 +72,14 @@ services:
     command:
       - '--config.file=/etc/prometheus-config/prometheus.yml'
     restart: unless-stopped
+    networks:
+      - internal
 
 networks:
   proxy:
     external: true
+  internal:
+    driver: bridge
 
 volumes:
   postgres_data:
