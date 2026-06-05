@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
@@ -35,6 +35,40 @@ def create_app():
     @app.context_processor
     def inject_current_year():
         return {'current_year': datetime.now().year}
+
+    # --- Cacheo de estáticos -------------------------------------------------
+    # Cache-busting automático por mtime: url_for('static', ...) agrega ?v=<mtime>,
+    # así la URL cambia cuando cambia el archivo y el cache largo es seguro.
+    @app.url_defaults
+    def add_static_cache_bust(endpoint, values):
+        if endpoint != 'static':
+            return
+        filename = values.get('filename')
+        if not filename:
+            return
+        try:
+            mtime = os.path.getmtime(os.path.join(app.static_folder, filename))
+            values['v'] = int(mtime)
+        except OSError:
+            pass
+
+    ONE_YEAR = 31536000   # 365 días
+    ONE_WEEK = 604800     # 7 días
+
+    @app.after_request
+    def set_static_cache_headers(response):
+        if request.path.startswith('/static/'):
+            if request.args.get('v'):
+                # URL versionada por mtime (assets propios vía url_for):
+                # como la URL cambia al cambiar el archivo, es seguro cachear
+                # "para siempre" e inmutable.
+                response.headers['Cache-Control'] = f'public, max-age={ONE_YEAR}, immutable'
+            else:
+                # Sin versión (p.ej. el footer compartido y favicon.svg que otras
+                # webs embeben con URL hardcodeada): TTL alto pero NO inmutable,
+                # para que los cambios igual propaguen dentro de la semana.
+                response.headers['Cache-Control'] = f'public, max-age={ONE_WEEK}'
+        return response
 
     with app.app_context():
         from app.routes import register_routes
