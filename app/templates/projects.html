@@ -28,6 +28,10 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
     <script src="{{ url_for('static', filename='js/analytics.js') }}" defer></script>
+
+    {% if config.get('UMAMI_WEBSITE_ID') %}
+    <script async src="https://analytics.nexttech.com.ar/script.js" data-website-id="{{ config.UMAMI_WEBSITE_ID }}"></script>
+    {% endif %}
 </head>
 <body>
     <header class="header">

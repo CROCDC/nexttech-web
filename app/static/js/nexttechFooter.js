@@ -49,6 +49,15 @@ class NexttechFooter extends HTMLElement {
                 </a>
             </div>
         `;
+
+        // The umami tracker lives in the host page; the footer is style-isolated in
+        // Shadow DOM, so data-umami-event auto-tracking does not reach it. Use the JS
+        // API instead. `source` lets each site that embeds the footer tag its own
+        // clicks so they are distinguishable in the Umami dashboard.
+        const source = this.getAttribute('source') || window.location.hostname;
+        this.shadowRoot.querySelector('a').addEventListener('click', () => {
+            window.umami?.track('nexttech-footer-click', { source });
+        });
     }
 }
 

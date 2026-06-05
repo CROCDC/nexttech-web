@@ -22,6 +22,11 @@ def create_app():
     # Configuración de uploads
     app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER') or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance', 'uploads')
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+    # Analytics (Umami) - el Website ID es público y actúa de interruptor
+    # (sin valor en dev => no se trackea). La URL del script es constante y va
+    # hardcodeada en los templates.
+    app.config['UMAMI_WEBSITE_ID'] = os.environ.get('UMAMI_WEBSITE_ID')
     
     # Inicializar extensiones
     db.init_app(app)
