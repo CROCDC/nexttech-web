@@ -5,6 +5,15 @@ class NexttechFooter extends HTMLElement {
     }
 
     connectedCallback() {
+        // `source` tags where the click came from. It travels to nexttech.com.ar as a
+        // UTM param on the link, so nexttech's own Umami records it under Referrers /
+        // UTM — centralized, and independent of whether the embedding site has Umami.
+        // (A custom umami.track() can't work here: it would fire against the embedding
+        // site's tracker, and rel="noreferrer" strips the referrer on navigation.)
+        const source = this.getAttribute('source') || window.location.hostname;
+        const href = 'https://nexttech.com.ar/?utm_source='
+            + encodeURIComponent(source) + '&utm_medium=footer';
+
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
@@ -43,21 +52,12 @@ class NexttechFooter extends HTMLElement {
                 }
             </style>
             <div class="nexttech-footer">
-                <a href="https://nexttech.com.ar" target="_blank" rel="noopener noreferrer">
+                <a href="${href}" target="_blank" rel="noopener">
                     <img src="https://nexttech.com.ar/static/assets/favicon.svg" alt="Next Tech Logo">
                     <span>Creado por Next Tech</span>
                 </a>
             </div>
         `;
-
-        // The umami tracker lives in the host page; the footer is style-isolated in
-        // Shadow DOM, so data-umami-event auto-tracking does not reach it. Use the JS
-        // API instead. `source` lets each site that embeds the footer tag its own
-        // clicks so they are distinguishable in the Umami dashboard.
-        const source = this.getAttribute('source') || window.location.hostname;
-        this.shadowRoot.querySelector('a').addEventListener('click', () => {
-            window.umami?.track('nexttech-footer-click', { source });
-        });
     }
 }
 
