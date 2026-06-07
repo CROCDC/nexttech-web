@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import render_template, request, jsonify, send_from_directory
+from flask import render_template, request, jsonify, send_from_directory, abort
 from werkzeug.utils import secure_filename
 
 from app.factory import db
@@ -8,6 +8,7 @@ from app.models import JobApplication
 from app.repositories.contact_repository import ContactMessageRepository
 from app.repositories.job_application_repository import JobApplicationRepository
 from app.repositories.job_opening_repository import JobOpeningRepository
+from app.repositories.report_repository import ReportRepository
 from app.models.job_opening import JobTypeEnum
 
 
@@ -50,6 +51,13 @@ def register_routes(app):
     @app.route('/projects')
     def projects():
         return render_template('projects.html')
+
+    @app.route('/reportes/<slug>')
+    def report(slug):
+        report = ReportRepository.get_by_slug(slug)
+        if report is None:
+            abort(404)
+        return render_template('report_web.html', report=report)
 
     @app.route('/work-with-us')
     def work_with_us():

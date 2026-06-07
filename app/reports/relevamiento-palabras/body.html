@@ -1,0 +1,86 @@
+<div class="nt-doc-head">
+  <h1>Relevamiento de bugs — Palabras</h1>
+  <div class="meta">
+    <span>Sitio: <a href="https://palabras.com.ar/">palabras.com.ar</a></span>
+    <span class="sep">·</span>
+    <span>3 incidencias</span>
+    <span class="sep">·</span>
+    <span>Junio 2026</span>
+  </div>
+</div>
+
+<!-- BUG 1 -->
+<div class="nt-bug">
+  <div class="nt-bug-head">
+    <span class="nt-bug-num">01</span>
+    <h2 class="nt-bug-title">Error al registrarse en el newsletter</h2>
+    <span class="nt-badge badge-pend">Pendiente</span>
+  </div>
+  <p class="sintoma"><span class="lbl">Síntoma:</span> al completar el formulario «Recibí las noticias en tu mail» y presionar <em>Suscribirse</em>, el sitio no muestra confirmación: redirige a una página en blanco en <code>palabras.com.ar/wp-admin/admin-ajax.php</code>, por lo que el usuario no sabe si la suscripción se realizó.</p>
+
+  <div class="nt-evi">
+    <figure>
+      <img class="shot" src="/static/reportes/relevamiento-palabras/newsletter-form.png" alt="Formulario de suscripción">
+      <figcaption>1 · Formulario de suscripción en la home.</figcaption>
+    </figure>
+    <figure>
+      <img class="shot" src="/static/reportes/relevamiento-palabras/newsletter-error.png" alt="Página en blanco tras enviar">
+      <figcaption>2 · Tras enviar: página en blanco en <code>admin-ajax.php</code>, sin mensaje de éxito.</figcaption>
+    </figure>
+  </div>
+
+  <figure class="nt-video">
+    <video controls preload="metadata" src="/static/reportes/relevamiento-palabras/01-newsletter.mp4"></video>
+    <figcaption>Video de la evidencia: el flujo completo de la suscripción fallando.</figcaption>
+  </figure>
+</div>
+
+<!-- BUG 2 -->
+<div class="nt-bug">
+  <div class="nt-bug-head">
+    <span class="nt-bug-num">02</span>
+    <h2 class="nt-bug-title">Los botones de redes no redirigen</h2>
+    <span class="nt-badge badge-pend">Pendiente</span>
+  </div>
+  <p class="sintoma"><span class="lbl">Síntoma:</span> los iconos de redes sociales del pie de página (Twitter / X e Instagram) no enlazan a los perfiles: al hacer clic no abren ninguna red.</p>
+
+  <div class="nt-evi">
+    <figure>
+      <img class="shot" src="/static/reportes/relevamiento-palabras/redes-footer.png" alt="Pie de página con iconos de redes">
+      <figcaption>Pie de página con los iconos de redes que no redirigen.</figcaption>
+    </figure>
+  </div>
+
+  <figure class="nt-video">
+    <video controls preload="metadata" src="/static/reportes/relevamiento-palabras/02-redes.mp4"></video>
+    <figcaption>Video de la evidencia: los clics en los iconos no abren ninguna red.</figcaption>
+  </figure>
+</div>
+
+<!-- BUG 3 — incluye evidencia de la solución (variante "resolución") -->
+<div class="nt-bug">
+  <div class="nt-bug-head">
+    <span class="nt-bug-num">03</span>
+    <h2 class="nt-bug-title">Copyright desactualizado</h2>
+    <span class="nt-badge badge-ok">Resuelto</span>
+  </div>
+  <p class="sintoma"><span class="lbl">Síntoma:</span> el pie de página mostraba «Copyright 2021 – Todos los derechos reservados.». El año estaba desactualizado.</p>
+
+  <div class="nt-evi">
+    <figure>
+      <img class="shot" src="/static/reportes/relevamiento-palabras/copyright.png" alt="Copyright con año 2021">
+      <figcaption>Antes: el pie mostraba el año 2021.</figcaption>
+    </figure>
+  </div>
+
+  <div class="nt-sol">
+    <div class="sol-label">Solución</div>
+    <p>Se reemplazó el año fijo por el año en curso calculado de forma dinámica, de modo que el pie de página se mantenga siempre actualizado sin intervención manual.</p>
+    <div class="nt-evi">
+      <figure>
+        <img class="shot" src="/static/reportes/relevamiento-palabras/copyright.png" alt="Copyright actualizado">
+        <figcaption>Después: el pie muestra el año vigente (evidencia ilustrativa).</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>{{ report.title }}{% if report.subtitle %} · {{ report.subtitle }}{% endif %} — Next Tech</title>
+<link rel="shortcut icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" type="image/x-icon">
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='assets/favicon.svg') }}">
+<style>
+  /* ===========================================================
+     Next Tech — branded WEB report
+     Mismos tokens que nexttech.com.ar (ver brand del skill).
+     Versión web del reporte: responsive, con video nativo.
+     =========================================================== */
+  :root{
+    --nt-navy:   #1E3D5C;
+    --nt-blue:   #2563EB;
+    --nt-blue-2: #60A5FA;
+    --nt-ink:    #333333;
+    --nt-mute:   #5b6b7b;
+    --nt-line:   #E5E7EB;
+    --nt-bg-soft:#F3F4F6;
+    --nt-white:  #FFFFFF;
+    --nt-page:   #F7F8FA;
+    --band-h: 64px;
+    --content-w: 860px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; padding:0;
+    font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--nt-ink);
+    font-size: 16px;
+    line-height: 1.65;
+    background: var(--nt-page);
+  }
+
+  /* ---- Banda superior sticky ---- */
+  .nt-header{
+    position: sticky; top:0; z-index: 20;
+    background: var(--nt-white);
+    border-bottom: 2px solid var(--nt-blue);
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 16px;
+    padding: 10px clamp(16px, 5vw, 40px);
+    box-shadow: 0 1px 8px rgba(30,61,92,.06);
+  }
+  .nt-header .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .nt-header .brand img{ height: 34px; width:auto; display:block; }
+  .nt-header .brand .wordmark{
+    font-size: 19px; font-weight: 700; color: var(--nt-navy); letter-spacing:.2px;
+  }
+  .nt-header .doc-meta{ text-align:right; line-height:1.25; min-width:0; }
+  .nt-header .doc-meta .t{ font-size:14px; font-weight:700; color:var(--nt-ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:48vw; }
+  .nt-header .doc-meta .s{ font-size:12px; color:var(--nt-mute);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:48vw; }
+
+  /* ---- Banda inferior ---- */
+  .nt-footer{
+    background: var(--nt-navy);
+    color: var(--nt-white);
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding: 18px clamp(16px, 5vw, 40px);
+    font-size: 13px; margin-top: 48px;
+  }
+  .nt-footer .left{ display:flex; align-items:center; gap:10px; opacity:.95; }
+  .nt-footer .left img{ height: 22px; width:auto; }
+  .nt-footer .right{ opacity:.8; text-align:right; }
+
+  /* ---- Columna de contenido ---- */
+  .nt-content{
+    max-width: var(--content-w);
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 48px) clamp(16px, 5vw, 40px) 8px;
+  }
+
+  /* ---- Portada / hero opcional (primer bloque navy) ---- */
+  .nt-cover{
+    background: linear-gradient(135deg, #1E3D5C 0%, #16314a 100%);
+    color: var(--nt-white);
+    border-radius: 18px;
+    padding: clamp(28px, 6vw, 56px) clamp(24px, 5vw, 48px);
+    margin-bottom: 36px;
+    box-shadow: 0 18px 40px rgba(30,61,92,.18);
+  }
+  .nt-cover h1{ color:#fff; border:0; margin:0 0 10px 0; font-size: clamp(28px, 5vw, 40px); }
+  .nt-cover .lead{ color: var(--nt-blue-2); font-size: clamp(16px,2.5vw,20px); margin:0; font-weight:500; }
+  .nt-cover .meta{ margin-top: 20px; font-size: 14px; opacity:.9; display:flex; flex-wrap:wrap; gap:6px 22px; }
+  .nt-cover strong{ color: #fff; font-weight:700; }
+
+  /* ---- Tipografía de contenido ---- */
+  h1,h2,h3{ color: var(--nt-navy); font-weight:700; line-height:1.25; scroll-margin-top: calc(var(--band-h) + 12px); }
+  h1{ font-size: clamp(24px,4vw,30px); margin: 0 0 12px; }
+  h2{
+    font-size: clamp(20px,3vw,24px); margin: 36px 0 12px;
+    padding-bottom: 6px; border-bottom: 2px solid var(--nt-blue-2);
+  }
+  h3{ font-size: 18px; color: var(--nt-blue); margin: 24px 0 6px; }
+  p{ margin: 0 0 14px; }
+  a{ color: var(--nt-blue); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  strong{ color: var(--nt-ink); }
+  ul,ol{ margin: 0 0 14px; padding-left: 22px; }
+  li{ margin: 4px 0; }
+
+  /* ---- Tablas ---- */
+  .nt-content table{ width:100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 15px;
+    background: var(--nt-white); border:1px solid var(--nt-line); border-radius:10px; overflow:hidden; }
+  thead th{
+    background: var(--nt-bg-soft); color: var(--nt-navy);
+    text-align:left; font-weight:700; padding: 11px 14px;
+    border-bottom: 2px solid var(--nt-blue-2);
+  }
+  tbody td{ padding: 10px 14px; border-bottom: 1px solid var(--nt-line); vertical-align: top; }
+  tbody tr:last-child td{ border-bottom: 0; }
+  tbody tr:nth-child(even){ background: #fafbfc; }
+
+  /* ---- Cajas de apoyo ---- */
+  .nt-card{ background: var(--nt-white); border:1px solid var(--nt-line); border-radius:12px;
+    padding:18px 20px; margin:16px 0; box-shadow: 0 2px 10px rgba(30,61,92,.05); }
+  .nt-callout{ border-left: 4px solid var(--nt-blue); background:#eff4ff; border-radius:8px;
+    padding:14px 18px; margin:16px 0; }
+  .nt-pill{ display:inline-block; padding:3px 12px; border-radius:999px; font-size:13px; font-weight:700; }
+  .pill-ok{ background:#e6f6ec; color:#137a3b; }
+  .pill-warn{ background:#fff4e0; color:#9a6700; }
+  .pill-crit{ background:#fde8e8; color:#b42318; }
+
+  /* ---- Video nativo (lo nuevo de la versión web) ---- */
+  .nt-video{ margin: 20px 0 24px; }
+  .nt-video video{
+    width:100%; height:auto; display:block;
+    background:#000; border-radius:14px;
+    box-shadow: 0 14px 34px rgba(30,61,92,.20);
+    aspect-ratio: 16 / 9; object-fit: cover;
+  }
+  .nt-video figcaption,
+  .nt-figure figcaption{
+    margin-top: 8px; font-size: 13.5px; color: var(--nt-mute); text-align:center;
+  }
+
+  /* ---- Figuras (imágenes) ---- */
+  .nt-figure{ margin: 20px 0 24px; }
+  .nt-figure img{ width:100%; height:auto; display:block; border-radius:14px;
+    box-shadow: 0 10px 28px rgba(30,61,92,.14); }
+
+  /* ---- Grilla de cards (KPIs / resumen) ---- */
+  .nt-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:14px; margin:16px 0; }
+
+  /* ---- Encabezado de documento (alternativa liviana a la portada navy) ---- */
+  .nt-doc-head{ border-bottom: 2px solid var(--nt-navy); padding-bottom: 16px; margin-bottom: 32px; }
+  .nt-doc-head h1{ margin: 0 0 8px; }
+  .nt-doc-head .meta{ font-size: 14.5px; color: var(--nt-mute); display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center; }
+  .nt-doc-head .meta .sep{ opacity:.5; }
+
+  /* ---- Badge de estado ---- */
+  .nt-badge{
+    font-size: 11.5px; font-weight: 700; letter-spacing:.4px; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 6px; white-space: nowrap; border:1px solid transparent;
+  }
+  .badge-pend{ background:#fef3c7; color:#92600a; border-color:#f0d488; }   /* Pendiente */
+  .badge-ok{   background:#e6f6ec; color:#137a3b; border-color:#aee0bf; }   /* Resuelto  */
+  .badge-crit{ background:#fde8e8; color:#b42318; border-color:#f3b9b4; }   /* Crítico   */
+  .badge-info{ background:#e7eefc; color:#1a45a8; border-color:#bcd0f5; }   /* En curso  */
+
+  /* ---- Tarjeta de incidencia (bug) ---- */
+  .nt-bug{
+    background: var(--nt-white); border:1px solid var(--nt-line); border-radius: 14px;
+    padding: 22px 24px; margin: 18px 0; box-shadow: 0 2px 12px rgba(30,61,92,.06);
+  }
+  .nt-bug-head{ display:flex; align-items:baseline; gap:12px; margin-bottom: 10px; }
+  .nt-bug-num{ font-size: 16px; font-weight: 800; color: var(--nt-blue-2); min-width: 26px; }
+  .nt-bug-title{ font-size: 19px; font-weight: 700; color: var(--nt-navy); margin:0; flex:1; line-height:1.3; }
+  .nt-bug .sintoma{ margin: 0 0 14px; }
+  .nt-bug .sintoma .lbl{ font-weight: 700; color: var(--nt-ink); }
+  .nt-bug code, .nt-content code{ background:#f2f4f7; padding:1px 6px; border-radius:4px; font-size:.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+  /* ---- Grilla de evidencia (screenshots lado a lado) ---- */
+  .nt-evi{ display:flex; gap:16px; flex-wrap:wrap; margin: 4px 0 6px; }
+  .nt-evi figure{ margin:0; flex:1; min-width: 220px; }
+  .nt-evi .shot{ width:100%; height:auto; display:block; border:1px solid var(--nt-line); border-radius:8px; }
+  .nt-evi figcaption{ font-size: 12.5px; color: var(--nt-mute); margin-top: 7px; line-height:1.4; text-align:left; }
+
+  /* ---- Bloque de solución (reporte de resolución) ---- */
+  .nt-sol{
+    margin-top: 16px; border-left: 4px solid #1f9d57; background: #f1faf4;
+    border-radius: 0 10px 10px 0; padding: 14px 18px;
+  }
+  .nt-sol .sol-label{
+    display:inline-flex; align-items:center; gap:7px; font-weight:700; color:#137a3b;
+    font-size: 14px; margin-bottom: 6px; text-transform: uppercase; letter-spacing:.4px;
+  }
+  .nt-sol .sol-label::before{ content:"✓"; display:inline-grid; place-items:center;
+    width:18px; height:18px; border-radius:50%; background:#1f9d57; color:#fff; font-size:12px; }
+  .nt-sol p{ margin: 0 0 10px; }
+  .nt-sol .nt-video, .nt-sol .nt-evi{ margin-top: 10px; margin-bottom: 4px; }
+
+  /* ---- Print (web-only, pero que Ctrl+P no quede roto) ---- */
+  @media print{
+    body{ background:#fff; }
+    .nt-header{ position:static; box-shadow:none; }
+    .nt-video video, .nt-figure img{ box-shadow:none; }
+    .nt-cover{ box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="nt-header">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='assets/logo-mark-navy.png') }}" alt="Next Tech">
+      <span class="wordmark">Next Tech</span>
+    </div>
+    <div class="doc-meta">
+      <div class="t">{{ report.title }}</div>
+      {% if report.subtitle %}<div class="s">{{ report.subtitle }}</div>{% endif %}
+    </div>
+  </header>
+
+  <main class="nt-content">
+{{ report.body | safe }}
+  </main>
+
+  <footer class="nt-footer">
+    <div class="left">
+      <img src="{{ url_for('static', filename='assets/logo-mark-white.png') }}" alt="">
+      <span>© {{ current_year }} Next Tech. Todos los derechos reservados.</span>
+    </div>
+    {% if report.footer_note %}<div class="right">{{ report.footer_note }}</div>{% endif %}
+  </footer>
+
+</body>
+</html>

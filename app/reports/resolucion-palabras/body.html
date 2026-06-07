@@ -1,0 +1,98 @@
+<div class="nt-doc-head">
+  <h1>Resolución de incidencias — Palabras</h1>
+  <div class="meta">
+    <span>Sitio: <a href="https://palabras.com.ar/">palabras.com.ar</a></span>
+    <span class="sep">·</span>
+    <span>3 incidencias resueltas</span>
+    <span class="sep">·</span>
+    <span>Junio 2026</span>
+  </div>
+</div>
+
+<div class="nt-callout">
+  <p style="margin:0">Las tres incidencias relevadas en <strong>palabras.com.ar</strong> fueron <strong>corregidas y verificadas en producción</strong>. Por cada una se incluye el síntoma original y la evidencia en video de la solución funcionando.</p>
+</div>
+
+<!-- BUG 1 — Newsletter -->
+<div class="nt-bug">
+  <div class="nt-bug-head">
+    <span class="nt-bug-num">01</span>
+    <h2 class="nt-bug-title">Error al registrarse en el newsletter</h2>
+    <span class="nt-badge badge-ok">Resuelto</span>
+  </div>
+  <p class="sintoma"><span class="lbl">Síntoma:</span> al completar el formulario «Recibí las noticias en tu mail» y presionar <em>Suscribirse</em>, el sitio no mostraba ninguna confirmación: redirigía a una página en blanco, por lo que el lector no sabía si su suscripción se había realizado.</p>
+
+  <div class="nt-evi">
+    <figure>
+      <img class="shot" src="/static/reportes/resolucion-palabras/newsletter-form.png" alt="Formulario de suscripción">
+      <figcaption>Antes 1 · Formulario de suscripción en la home.</figcaption>
+    </figure>
+    <figure>
+      <img class="shot" src="/static/reportes/resolucion-palabras/newsletter-error.png" alt="Página en blanco tras enviar">
+      <figcaption>Antes 2 · Tras enviar: página en blanco, sin mensaje de éxito.</figcaption>
+    </figure>
+  </div>
+
+  <div class="nt-sol">
+    <div class="sol-label">Solución</div>
+    <p>Ahora, al suscribirse, el formulario muestra de inmediato el mensaje <strong>«Tu suscripción ha sido confirmada»</strong> en la misma página, sin redirigir a ninguna pantalla en blanco. El lector recibe confirmación clara de que su registro fue exitoso.</p>
+    <figure class="nt-video">
+      <video controls preload="metadata" poster="/static/reportes/resolucion-palabras/01-newsletter-solucion.poster.jpg" src="/static/reportes/resolucion-palabras/01-newsletter-solucion.mp4"></video>
+      <figcaption>Evidencia de la solución: la suscripción confirma inline, en la misma página.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- BUG 2 — Redes sociales -->
+<div class="nt-bug">
+  <div class="nt-bug-head">
+    <span class="nt-bug-num">02</span>
+    <h2 class="nt-bug-title">Los botones de redes no redirigen</h2>
+    <span class="nt-badge badge-ok">Resuelto</span>
+  </div>
+  <p class="sintoma"><span class="lbl">Síntoma:</span> los iconos de redes sociales del pie de página (Twitter / X e Instagram) no enlazaban a ningún perfil: al hacer clic no abrían ninguna red.</p>
+
+  <div class="nt-evi">
+    <figure>
+      <img class="shot" src="/static/reportes/resolucion-palabras/redes-footer.png" alt="Pie de página con iconos de redes">
+      <figcaption>Antes · Pie de página con los iconos de redes que no enlazaban a ningún perfil.</figcaption>
+    </figure>
+  </div>
+
+  <div class="nt-sol">
+    <div class="sol-label">Solución</div>
+    <p>Los iconos del pie ahora enlazan a los perfiles oficiales de la revista —<strong>Twitter / X</strong> (@PalabrasRevist) e <strong>Instagram</strong> (revista_palabras)— y se abren en una pestaña nueva.</p>
+    <figure class="nt-video">
+      <video controls preload="metadata" poster="/static/reportes/resolucion-palabras/02-redes-copyright-solucion.poster.jpg" src="/static/reportes/resolucion-palabras/02-redes-copyright-solucion.mp4"></video>
+      <figcaption>Evidencia de la solución: cada icono abre el perfil real de la revista.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- BUG 3 — Copyright -->
+<div class="nt-bug">
+  <div class="nt-bug-head">
+    <span class="nt-bug-num">03</span>
+    <h2 class="nt-bug-title">Copyright desactualizado</h2>
+    <span class="nt-badge badge-ok">Resuelto</span>
+  </div>
+  <p class="sintoma"><span class="lbl">Síntoma:</span> el pie de página mostraba «Copyright 2021 – Todos los derechos reservados.», con el año desactualizado.</p>
+
+  <div class="nt-evi">
+    <figure>
+      <img class="shot" src="/static/reportes/resolucion-palabras/copyright.png" alt="Copyright con año 2021">
+      <figcaption>Antes · El pie mostraba el año 2021.</figcaption>
+    </figure>
+  </div>
+
+  <div class="nt-sol">
+    <div class="sol-label">Solución</div>
+    <p>El pie ahora muestra <strong>«Copyright 2026»</strong>, y el año se calcula de forma dinámica para mantenerse siempre actualizado sin intervención manual.</p>
+    <div class="nt-evi">
+      <figure>
+        <img class="shot" src="/static/reportes/resolucion-palabras/copyright-despues.jpg" alt="Copyright con año 2026">
+        <figcaption>Después · El pie muestra «Copyright 2026» (cuadro del video de evidencia del pie de página).</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
