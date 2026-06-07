@@ -20,6 +20,8 @@ class Report:
     subtitle: str
     footer_note: str
     body: str  # fragmento HTML escrito por el autor del reporte (contenido confiable)
+    og_description: str = ''  # descripción para el preview social (cae a subtitle si vacío)
+    og_image: str = ''        # nombre del archivo OG dentro de static/reportes/<slug>/ (ej. "og.png"); '' si no hay
 
 
 class ReportRepository:
@@ -51,7 +53,25 @@ class ReportRepository:
             subtitle=meta.get('subtitle', ''),
             footer_note=meta.get('footer_note', ''),
             body=body,
+            og_description=meta.get('og_description', ''),
+            og_image=ReportRepository._resolve_og_image(slug, meta.get('og_image')),
         )
+
+    @staticmethod
+    def _resolve_og_image(slug: str, override: Optional[str]) -> str:
+        """Nombre del archivo OG (1200×630) dentro de static/reportes/<slug>/.
+
+        Prioridad: el que indique meta.json (`og_image`), si no `og.png`, si no `og.jpg`.
+        Devuelve '' si no hay ninguno (el template emite preview sin imagen).
+        La imagen la genera scripts/make_og_image.py del skill generate-nexttech-report-web.
+        """
+        static_dir = os.path.join(os.path.dirname(REPORTS_DIR), 'static', 'reportes', slug)
+        candidates = [override] if override else []
+        candidates += ['og.png', 'og.jpg']
+        for name in candidates:
+            if name and os.path.isfile(os.path.join(static_dir, name)):
+                return name
+        return ''
 
     @staticmethod
     def get_all() -> list[Report]:

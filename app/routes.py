@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import render_template, request, jsonify, send_from_directory, abort
+from flask import render_template, request, jsonify, send_from_directory, abort, url_for
 from werkzeug.utils import secure_filename
 
 from app.factory import db
@@ -57,7 +57,24 @@ def register_routes(app):
         report = ReportRepository.get_by_slug(slug)
         if report is None:
             abort(404)
-        return render_template('report_web.html', report=report)
+        # URLs absolutas para el preview de Open Graph (WhatsApp/Slack/etc.).
+        # El dominio público es configurable por env (default: producción).
+        base = os.environ.get('REPORT_PUBLIC_BASE_URL', 'https://nexttech.com.ar').rstrip('/')
+        canonical_url = base + url_for('report', slug=report.slug)
+        og_image_url = None
+        og_image_type = None
+        if report.og_image:
+            # url_for('static', ...) agrega ?v=<mtime> => cache-bust que ayuda a
+            # forzar el re-scrape cuando se regenera la imagen del reporte.
+            og_image_url = base + url_for('static', filename=f'reportes/{report.slug}/{report.og_image}')
+            og_image_type = 'image/jpeg' if report.og_image.lower().endswith(('.jpg', '.jpeg')) else 'image/png'
+        return render_template(
+            'report_web.html',
+            report=report,
+            canonical_url=canonical_url,
+            og_image_url=og_image_url,
+            og_image_type=og_image_type,
+        )
 
     @app.route('/work-with-us')
     def work_with_us():
