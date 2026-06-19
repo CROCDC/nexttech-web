@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Conocé los proyectos desarrollados por Next Tech: El Sonido Del Torno, Chaac, Comunicación Pública, Kailua Sailing, Focus Consultores PR, Calculadora de Madera, Leviatán, El Pampero, FF Retro, GLÜCK, Track Produce y más.">
+    <meta name="description" content="Conocé los proyectos desarrollados por Next Tech: El Sonido Del Torno, Chaac, Comunicación Pública, Kailua Sailing, Focus Consultores PR, Calculadora de Madera, Leviatán, El Pampero, FF Retro, GLÜCK, Track Produce, 9 del 12, Hacelo y me muero y más.">
     <meta name="keywords" content="nexttech, proyectos, software factory, desarrollo web, aplicaciones, argentina">
     <meta name="author" content="Next Tech">
     <meta name="robots" content="index, follow">
@@ -60,6 +60,20 @@
                     <p class="subtitle">Soluciones digitales que desarrollamos para nuestros clientes.</p>
                 </div>
                 <div class="projects-grid">
+                    <a href="https://9del12.com/" target="_blank" rel="noopener noreferrer" class="project-card project-card--9del12 animate__animated animate__fadeInUp">
+                        <div class="project-icon project-icon--9del12 project-icon--img">
+                            <img src="{{ url_for('static', filename='assets/projects/9del12.svg') }}" alt="9 del 12" width="56" height="56" loading="lazy">
+                        </div>
+                        <h3>9 del 12</h3>
+                        <p>Sitio conmemorativo de la cuarta Copa Libertadores de River Plate, ganada a Boca el 9 de diciembre de 2018 en Madrid: crónicas, galería, jugadores y el camino a la gloria.</p>
+                    </a>
+                    <a href="https://haceloymemuero.com/" target="_blank" rel="noopener noreferrer" class="project-card project-card--haceloymemuero animate__animated animate__fadeInUp">
+                        <div class="project-icon project-icon--haceloymemuero project-icon--img project-icon--round">
+                            <img src="{{ url_for('static', filename='assets/projects/haceloymemuero.png') }}" alt="Hacelo y me muero" width="56" height="56" loading="lazy">
+                        </div>
+                        <h3>Hacelo y me muero</h3>
+                        <p>Espacio digital dedicado a River Plate: noticias, videos, entrevistas y la emoción millonaria contada por hinchas, para hinchas.</p>
+                    </a>
                     <a href="https://trackproduce.nexttech.com.ar/" target="_blank" rel="noopener noreferrer" class="project-card project-card--trackproduce animate__animated animate__fadeInUp">
                         <div class="project-icon project-icon--trackproduce project-icon--img">
                             <img src="{{ url_for('static', filename='assets/projects/trackproduce.png') }}" alt="Track Produce" width="56" height="56" loading="lazy">
@@ -265,6 +279,8 @@
         .project-icon--ffretro { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important; }
         .project-icon--gluck { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%) !important; }
         .project-icon--trackproduce { background: linear-gradient(135deg, #1f2937 0%, #07060e 100%) !important; }
+        .project-icon--9del12 { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important; }
+        .project-icon--haceloymemuero { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important; }
 
         .projects-section .project-icon--img {
             padding: 0.25rem;
