@@ -1,443 +1,185 @@
-// Menú móvil
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-
-menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    menuToggle.querySelector('i').classList.toggle('fa-bars');
-    menuToggle.querySelector('i').classList.toggle('fa-times');
-});
-
-// Cerrar menú al hacer clic en un enlace
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        menuToggle.querySelector('i').classList.add('fa-bars');
-        menuToggle.querySelector('i').classList.remove('fa-times');
-    });
-});
-
-// Animación suave del scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
-
-// Animación del header al hacer scroll
-let lastScroll = 0;
-const header = document.querySelector('.header');
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll <= 0) {
-        header.classList.remove('scroll-up');
-        return;
-    }
-
-    if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
-        header.classList.remove('scroll-up');
-        header.classList.add('scroll-down');
-    } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
-        header.classList.remove('scroll-down');
-        header.classList.add('scroll-up');
-    }
-    lastScroll = currentScroll;
-});
-
-// Función para inicializar el menú móvil
+// Mobile navigation drawer
 function initMobileMenu() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
-
     if (!menuToggle || !navLinks) return;
 
-    menuToggle.addEventListener('click', () => {
-        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-        menuToggle.setAttribute('aria-expanded', !isExpanded);
+    const icon = menuToggle.querySelector('i');
 
-        navLinks.classList.toggle('active');
-        menuToggle.querySelector('i').classList.toggle('fa-bars');
-        menuToggle.querySelector('i').classList.toggle('fa-times');
+    menuToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('active');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        if (icon) {
+            icon.classList.toggle('fa-bars', !isOpen);
+            icon.classList.toggle('fa-times', isOpen);
+        }
     });
 
-    // Cerrar menú al hacer click en un enlace
-    document.querySelectorAll('.nav-links a').forEach(link => {
+    navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('active');
-            menuToggle.querySelector('i').classList.add('fa-bars');
-            menuToggle.querySelector('i').classList.remove('fa-times');
             menuToggle.setAttribute('aria-expanded', 'false');
+            if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
         });
     });
 }
 
-// Función para inicializar la animación del scroll
-function initScrollAnimation() {
-    // Animación suave del scroll
+// Header background intensifies once the page is scrolled
+function initHeaderScroll() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+// Smooth in-page anchor scrolling
+function initAnchorScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
             const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-
-                // Actualizar la URL sin recargar la página
-                history.pushState(null, '', targetId);
-
-                // Actualizar el estado activo de los enlaces
-                document.querySelectorAll('.nav-links a').forEach(link => {
-                    link.removeAttribute('aria-current');
-                });
-                this.setAttribute('aria-current', 'page');
-            }
+            if (targetId === '#' || targetId.length < 2) return;
+            const target = document.querySelector(targetId);
+            if (!target) return;
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', targetId);
         });
     });
-
-    // Animación del header al hacer scroll
-    let lastScroll = 0;
-    const header = document.querySelector('.header');
-
-    if (header) {
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll <= 0) {
-                header.classList.remove('scroll-up');
-                return;
-            }
-
-            if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
-                header.classList.remove('scroll-up');
-                header.classList.add('scroll-down');
-            } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
-                header.classList.remove('scroll-down');
-                header.classList.add('scroll-up');
-            }
-            lastScroll = currentScroll;
-        });
-    }
 }
 
-// Services carousel functionality
-function initServicesCarousel() {
-    const carousel = document.querySelector('.services-carousel');
-    const prevButton = document.querySelector('.carousel-button.prev');
-    const nextButton = document.querySelector('.carousel-button.next');
-    const cards = document.querySelectorAll('.service-card');
+// Reveal elements as they enter the viewport
+function initReveal() {
+    const items = document.querySelectorAll('.reveal:not(.in)');
+    if (!items.length) return;
 
-    if (!carousel || !prevButton || !nextButton || cards.length === 0) {
-        console.warn('Elementos del carrusel no encontrados');
+    if (!('IntersectionObserver' in window)) {
+        items.forEach(el => el.classList.add('in'));
         return;
     }
 
-    let currentIndex = 0;
-    const cardWidth = cards[0].offsetWidth;
-    const gap = 32; // 2rem gap
-    let autoSlideInterval;
-
-    function updateCarousel() {
-        const offset = currentIndex * (cardWidth + gap);
-        carousel.scrollTo({
-            left: offset,
-            behavior: 'smooth'
-        });
-
-        // Actualizar atributos ARIA para accesibilidad
-        cards.forEach((card, index) => {
-            if (index === currentIndex) {
-                card.setAttribute('aria-hidden', 'false');
-                card.setAttribute('tabindex', '0');
-            } else {
-                card.setAttribute('aria-hidden', 'true');
-                card.setAttribute('tabindex', '-1');
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                obs.unobserve(entry.target);
             }
         });
-    }
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-    function nextSlide() {
-        currentIndex++;
-        if (currentIndex >= cards.length) {
-            currentIndex = 0;
-        }
-        updateCarousel();
-    }
-
-    function prevSlide() {
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = cards.length - 1;
-        }
-        updateCarousel();
-    }
-
-    function getVisibleCards() {
-        if (window.innerWidth >= 1024) return 3;
-        if (window.innerWidth >= 768) return 2;
-        return 1;
-    }
-
-    function startAutoSlide() {
-        stopAutoSlide(); // Limpiar intervalo existente
-        autoSlideInterval = setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
-    }
-
-    function stopAutoSlide() {
-        if (autoSlideInterval) {
-            clearInterval(autoSlideInterval);
-        }
-    }
-
-    // Event listeners
-    nextButton.addEventListener('click', () => {
-        nextSlide();
-        stopAutoSlide();
-        startAutoSlide();
-    });
-
-    prevButton.addEventListener('click', () => {
-        prevSlide();
-        stopAutoSlide();
-        startAutoSlide();
-    });
-
-    // Pausar auto-slide cuando el mouse está sobre el carrusel
-    carousel.addEventListener('mouseenter', stopAutoSlide);
-    carousel.addEventListener('mouseleave', startAutoSlide);
-
-    // Update on window resize
-    window.addEventListener('resize', () => {
-        currentIndex = 0;
-        updateCarousel();
-        stopAutoSlide();
-        startAutoSlide();
-    });
-
-    // Inicializar atributos ARIA
-    cards.forEach((card, index) => {
-        if (index === 0) {
-            card.setAttribute('aria-hidden', 'false');
-            card.setAttribute('tabindex', '0');
-        } else {
-            card.setAttribute('aria-hidden', 'true');
-            card.setAttribute('tabindex', '-1');
-        }
-    });
-
-    // Iniciar auto-slide
-    startAutoSlide();
+    items.forEach(el => observer.observe(el));
 }
 
-// Función para manejar el formulario de contacto
+// Horizontal projects scroller (home featured section)
+function initProjectScroller() {
+    const scroller = document.getElementById('featuredProjects');
+    if (!scroller) return;
+    const wrap = scroller.closest('.projects-scroller-wrap');
+    const prev = wrap.querySelector('.scroller-btn.prev');
+    const next = wrap.querySelector('.scroller-btn.next');
+
+    const step = () => {
+        const card = scroller.querySelector('.project-card');
+        return card ? card.offsetWidth + 22 : 320;
+    };
+
+    prev && prev.addEventListener('click', () => scroller.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next && next.addEventListener('click', () => scroller.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    const update = () => {
+        const max = scroller.scrollWidth - scroller.clientWidth;
+        const atStart = scroller.scrollLeft <= 8;
+        const atEnd = scroller.scrollLeft >= max - 8;
+        wrap.classList.toggle('at-start', atStart);
+        wrap.classList.toggle('at-end', atEnd || max <= 8);
+        if (prev) prev.disabled = atStart;
+        if (next) next.disabled = atEnd || max <= 8;
+    };
+
+    scroller.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+}
+
+// Contact form -> POST /send-message
 function initContactForm() {
     const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+    if (!contactForm) return;
 
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
+    contactForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-            if (!name || !email || !message) {
-                showMessage('Por favor complete todos los campos', 'error');
-                return;
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !message) {
+            showMessage('Por favor complete todos los campos', 'error');
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showMessage('Por favor ingrese un email válido', 'error');
+            return;
+        }
+
+        try {
+            showMessage('Enviando mensaje...', 'info');
+
+            const response = await fetch('/send-message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage('¡Mensaje enviado con éxito!', 'success');
+                contactForm.reset();
+            } else {
+                throw new Error(data.error || 'Error al enviar el mensaje');
             }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showMessage('Por favor ingrese un email válido', 'error');
-                return;
-            }
-
-            try {
-                showMessage('Enviando mensaje...', 'info');
-
-                const response = await fetch('/send-message', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        message
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showMessage('¡Mensaje enviado con éxito!', 'success');
-                    contactForm.reset();
-                } else {
-                    throw new Error(data.error || 'Error al enviar el mensaje');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('Hubo un error al enviar el mensaje. Por favor intente nuevamente.', 'error');
-            }
-        });
-    }
+        } catch (error) {
+            console.error('Error:', error);
+            showMessage('Hubo un error al enviar el mensaje. Por favor intente nuevamente.', 'error');
+        }
+    });
 }
 
 function showMessage(message, type) {
-    const previousMessages = document.querySelectorAll('.alert-message');
-    previousMessages.forEach(msg => msg.remove());
+    document.querySelectorAll('.alert-message').forEach(msg => msg.remove());
 
     const messageDiv = document.createElement('div');
     messageDiv.className = `alert-message ${type}`;
-    
-    // Añadir ícono según el tipo de mensaje
+
     const icon = document.createElement('span');
     icon.className = 'message-icon';
-    switch(type) {
-        case 'success':
-            icon.innerHTML = '✓';
-            break;
-        case 'error':
-            icon.innerHTML = '✕';
-            break;
-        case 'info':
-            icon.innerHTML = 'ℹ';
-            break;
-    }
-    
+    icon.innerHTML = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+
     const messageText = document.createElement('span');
     messageText.className = 'message-text';
     messageText.textContent = message;
-    
+
     messageDiv.appendChild(icon);
     messageDiv.appendChild(messageText);
 
     const form = document.querySelector('.contact-form');
     form.parentNode.insertBefore(messageDiv, form);
 
-    // Añadir clase para animación de entrada
     setTimeout(() => messageDiv.classList.add('show'), 10);
-
-    // Añadir clase para animación de salida antes de remover
     setTimeout(() => {
         messageDiv.classList.remove('show');
         setTimeout(() => messageDiv.remove(), 300);
     }, 5000);
 }
 
-// Función para mejorar el rendimiento
-function initPerformanceOptimizations() {
-    // Lazy loading para imágenes
-    if ('loading' in HTMLImageElement.prototype) {
-        const images = document.querySelectorAll('img[loading="lazy"]');
-        images.forEach(img => {
-            if (img.dataset.src) {  // Solo asignar si dataset.src existe
-                img.src = img.dataset.src;
-            }
-        });
-    } else {
-        // Fallback para navegadores que no soportan lazy loading nativo
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
-        document.body.appendChild(script);
-    }
-}
-
-// Función para inicializar el carrusel de equipo
-function initTeamCarousel() {
-    const teamCarousel = document.querySelector('.team-carousel');
-    if (!teamCarousel) {
-        console.warn('Carrusel de equipo no encontrado');
-        return;
-    }
-
-    const teamSlides = teamCarousel.querySelectorAll('.team-slide');
-    const prevButton = teamCarousel.closest('.team-container')?.querySelector('.carousel-button.prev');
-    const nextButton = teamCarousel.closest('.team-container')?.querySelector('.carousel-button.next');
-
-    if (!teamSlides.length || !prevButton || !nextButton) {
-        console.warn('Elementos del carrusel de equipo incompletos');
-        return;
-    }
-
-    let currentTeamSlide = 0;
-    let isAnimating = false;
-    let teamAutoplayInterval = null;
-
-    function scrollToSlide(index) {
-        if (isAnimating || !teamCarousel) return;
-        isAnimating = true;
-
-        const slideWidth = teamSlides[0]?.offsetWidth || 0;
-        const gap = parseInt(window.getComputedStyle(teamCarousel).gap) || 0;
-        const scrollPosition = index * (slideWidth + gap);
-
-        if (scrollPosition >= 0) {
-            teamCarousel.scrollTo({
-                left: scrollPosition,
-                behavior: 'smooth'
-            });
-        }
-
-        currentTeamSlide = index;
-        
-        setTimeout(() => {
-            isAnimating = false;
-        }, 500);
-    }
-
-    function nextTeamSlide() {
-        if (isAnimating) return;
-        const nextIndex = (currentTeamSlide + 1) % teamSlides.length;
-        scrollToSlide(nextIndex);
-    }
-
-    function prevTeamSlide() {
-        if (isAnimating) return;
-        const prevIndex = (currentTeamSlide - 1 + teamSlides.length) % teamSlides.length;
-        scrollToSlide(prevIndex);
-    }
-
-    function startAutoSlide() {
-        stopAutoSlide();
-        teamAutoplayInterval = setInterval(nextTeamSlide, 5000);
-    }
-
-    function stopAutoSlide() {
-        if (teamAutoplayInterval) {
-            clearInterval(teamAutoplayInterval);
-            teamAutoplayInterval = null;
-        }
-    }
-
-    // Event listeners
-    prevButton.addEventListener('click', prevTeamSlide);
-    nextButton.addEventListener('click', nextTeamSlide);
-
-    // Pausar autoplay al interactuar
-    teamCarousel.addEventListener('mouseenter', stopAutoSlide);
-    teamCarousel.addEventListener('mouseleave', startAutoSlide);
-    teamCarousel.addEventListener('touchstart', stopAutoSlide);
-    teamCarousel.addEventListener('touchend', startAutoSlide);
-
-    // Inicializar el carrusel
-    currentTeamSlide = 0;
-    scrollToSlide(0);
-    startAutoSlide();
-}
-
-// Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    initServicesCarousel();
     initMobileMenu();
-    initScrollAnimation();
+    initHeaderScroll();
+    initAnchorScroll();
+    initReveal();
+    initProjectScroller();
     initContactForm();
-    initPerformanceOptimizations();
-    initTeamCarousel();
-}); 
+});
