@@ -49,7 +49,7 @@ _PROJECTS = [
      "Herramienta para calcular cortes de madera: seleccioná tipo de corte (cuadrado, rectangular), ingresá medidas y consultá el historial de cálculos.", ""),
     ("Leviatán", "https://leviatan.nexttech.com.ar/", "leviatan.png", False,
      "Horarios de ferries desde Colonia del Sacramento: salidas, llegadas y mapa con la operación de Buquebus y Colonia Express en un solo lugar.", ""),
-    ("Periodismo Federal", "https://periodismofederal.com/", "periodismofederal.png", True,
+    ("Periodismo Federal", "https://periodismofederal.com/", "periodismofederal-icon.png", True,
      "Medio de noticias argentino con cobertura política, económica y electoral a nivel nacional y provincial: política, economía, finanzas, encuestas, agro, energía y negocios.",
      "Medio de noticias argentino con cobertura política, económica y electoral a nivel nacional y provincial."),
 ]
