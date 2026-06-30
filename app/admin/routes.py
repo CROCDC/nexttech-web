@@ -144,6 +144,67 @@ def job_opening_delete(opening_id):
     return redirect(url_for('admin.job_openings'))
 
 
+# JSON API for bulk-loading job openings from a script/CLI. Same Basic Auth as
+# the rest of the panel (the before_request guard). Upsert is keyed by title;
+# `job_type` must be a JobTypeEnum member name.
+@admin_bp.route('/api/job-openings', methods=['GET'])
+def api_job_openings_list():
+    return jsonify([
+        {
+            'id': o.id, 'title': o.title, 'description': o.description,
+            'job_type': o.job_type.name, 'job_type_label': o.job_type.label,
+        }
+        for o in JobOpeningRepository.get_all()
+    ])
+
+
+@admin_bp.route('/api/job-openings', methods=['POST'])
+def api_job_openings_upsert():
+    payload = request.get_json(silent=True)
+    if payload is None:
+        return jsonify({'error': 'Body JSON inválido o ausente.'}), 400
+    items = payload.get('job_openings') if isinstance(payload, dict) else payload
+    if not isinstance(items, list):
+        return jsonify({'error': 'Se espera una lista de búsquedas (o {"job_openings": [...]}).'}), 400
+
+    created, updated, errors = [], [], []
+    for i, item in enumerate(items):
+        if not isinstance(item, dict):
+            errors.append({'index': i, 'error': 'No es un objeto.'})
+            continue
+        title = str(item.get('title') or '').strip()
+        description = str(item.get('description') or '').strip()
+        job_type_name = str(item.get('job_type') or '').strip()
+        missing = [f for f in ('title', 'description', 'job_type')
+                   if not str(item.get(f) or '').strip()]
+        if missing:
+            errors.append({'index': i, 'title': item.get('title'),
+                           'error': f'Faltan campos: {", ".join(sorted(missing))}'})
+            continue
+        if job_type_name not in JobTypeEnum.__members__:
+            errors.append({'index': i, 'title': title,
+                           'error': f'job_type inválido: {job_type_name}. '
+                                    f'Válidos: {", ".join(JobTypeEnum.__members__)}'})
+            continue
+
+        opening = JobOpening.query.filter_by(title=title).first()
+        is_new = opening is None
+        if is_new:
+            opening = JobOpening()
+        opening.title = title
+        opening.description = description
+        opening.job_type = JobTypeEnum[job_type_name]
+        if is_new:
+            db.session.add(opening)
+            created.append(title)
+        else:
+            updated.append(title)
+
+    db.session.commit()
+    return jsonify({'created': created, 'updated': updated, 'errors': errors,
+                    'total': len(JobOpeningRepository.get_all())})
+
+
 # --- Proyectos -------------------------------------------------------------
 
 @admin_bp.route('/proyectos')

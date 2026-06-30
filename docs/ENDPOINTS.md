@@ -57,8 +57,10 @@ All `/admin/*` routes (including the JSON API) are guarded by HTTP **Basic Auth*
 | GET / POST | `/admin/busquedas/nueva` | form: `title`, `description`, `job_type` | Create a job opening. |
 | GET / POST | `/admin/busquedas/<id>/editar` | form: `title`, `description`, `job_type` | Edit a job opening. `404` if not found. |
 | POST | `/admin/busquedas/<id>/eliminar` | — | Delete a job opening. |
+| GET | `/admin/api/job-openings` | — | JSON list of all job openings (for scripts/CLI). |
+| POST | `/admin/api/job-openings` | JSON: list, or `{job_openings: [...]}` | Bulk upsert keyed by `title`. Each item: `title`, `description`, `job_type`. Returns `{created, updated, errors, total}`. |
 
-`job_type` must be a `JobTypeEnum` member name (`DESIGNER`, `SOFTWARE_ENGINEER`, `AI`, `CYBERSECURITY`).
+`job_type` must be a `JobTypeEnum` member name (`DESIGNER`, `SOFTWARE_ENGINEER`, `AI`, `CYBERSECURITY`, `SECRETARY`).
 
 ### Projects (proyectos)
 

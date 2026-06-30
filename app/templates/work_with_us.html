@@ -58,7 +58,9 @@
         }
         .job-card .job-icon { max-width: 46px; max-height: 46px; object-fit: contain; }
         .job-card h3 { color: #fff; font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .job-card p { color: var(--text-soft); font-size: 0.95rem; }
+        /* pre-line: keep the description's line breaks so structured postings
+           (responsabilidades / requisitos) read well, while still wrapping. */
+        .job-card p { color: var(--text-soft); font-size: 0.95rem; white-space: pre-line; text-align: left; }
 
         /* Application form */
         .application-form-container {

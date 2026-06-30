@@ -8,6 +8,7 @@ class JobTypeEnum(enum.Enum):
     SOFTWARE_ENGINEER = ('Software Engineer', 'software_engineer.png')
     AI = ('AI', 'ai.png')
     CYBERSECURITY = ('Cybersecurity', 'cybersecurity.png')
+    SECRETARY = ('Secretaría', 'secretary.png')
 
     def __init__(self, label, icon):
         self.label = label
