@@ -1,4 +1,7 @@
 import os
+import re
+import urllib.error
+import urllib.request
 
 from flask import (abort, current_app, flash, jsonify, redirect, render_template,
                    request, send_file, url_for)
@@ -16,6 +19,12 @@ from app.repositories.project_repository import ProjectRepository
 
 # Icon formats accepted by the projects page (svg renders crisp; raster as fallback).
 _ICON_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg', 'webp', 'gif'}
+# Content-Type → extension for icons fetched via icon_url.
+_ICON_CONTENT_TYPES = {
+    'image/svg+xml': 'svg', 'image/png': 'png', 'image/jpeg': 'jpg',
+    'image/webp': 'webp', 'image/gif': 'gif',
+}
+_MAX_ICON_BYTES = 5 * 1024 * 1024
 
 
 @admin_bp.before_request
@@ -24,7 +33,9 @@ def _guard():
 
 
 def _projects_asset_dir():
-    return os.path.join(current_app.static_folder, 'assets', 'projects')
+    """Durable folder (on the uploads volume) where new icons are stored, so they
+    survive image rebuilds. Legacy icons still live under static/assets/projects/."""
+    return current_app.config['PROJECT_ICONS_FOLDER']
 
 
 def _allowed_icon(filename):
@@ -32,13 +43,43 @@ def _allowed_icon(filename):
 
 
 def _save_icon(file_storage):
-    """Persist an uploaded icon into static/assets/projects/ and return its name."""
+    """Persist an uploaded icon into the durable projects folder, return its name."""
     filename = secure_filename(file_storage.filename)
     if not _allowed_icon(filename):
         raise ValueError('Formato de ícono no permitido (usá SVG, PNG, JPG, WEBP o GIF).')
     os.makedirs(_projects_asset_dir(), exist_ok=True)
     file_storage.save(os.path.join(_projects_asset_dir(), filename))
     return filename
+
+
+def _icon_name_from(project_name, ext):
+    """Deterministic icon filename from the project name, so re-fetching a
+    project's icon overwrites it instead of piling up files."""
+    slug = re.sub(r'[^a-z0-9]+', '-', (project_name or '').lower()).strip('-') or 'project'
+    return f'{slug}.{ext}'
+
+
+def _download_icon(url, project_name):
+    """Fetch an icon by URL (admin-only) into the durable folder, return its name."""
+    if not re.match(r'^https?://', url, re.I):
+        raise ValueError('icon_url debe ser una URL http(s).')
+    req = urllib.request.Request(url, headers={'User-Agent': 'nexttech-web/1.0'})
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        ctype = (resp.headers.get('Content-Type') or '').split(';')[0].strip().lower()
+        data = resp.read(_MAX_ICON_BYTES + 1)
+    if len(data) > _MAX_ICON_BYTES:
+        raise ValueError('El ícono supera el tamaño máximo (5 MB).')
+    ext = _ICON_CONTENT_TYPES.get(ctype)
+    if ext is None:
+        tail = url.split('?', 1)[0].rsplit('.', 1)
+        candidate = tail[1].lower() if len(tail) == 2 else ''
+        ext = candidate if candidate in _ICON_EXTENSIONS else None
+    if ext is None:
+        raise ValueError('No se pudo determinar el formato del ícono (SVG/PNG/JPG/WEBP/GIF).')
+    os.makedirs(_projects_asset_dir(), exist_ok=True)
+    with open(os.path.join(_projects_asset_dir(), _icon_name_from(project_name, ext)), 'wb') as fh:
+        fh.write(data)
+    return _icon_name_from(project_name, ext)
 
 
 # --- Dashboard -------------------------------------------------------------
@@ -130,11 +171,14 @@ def project_form(project_id=None):
         sort_order = request.form.get('sort_order', type=int) or 0
         featured_order = request.form.get('featured_order', type=int) or 0
 
+        icon_url = (request.form.get('icon_url') or '').strip()
         upload = request.files.get('icon_file')
         try:
             if upload and upload.filename:
                 icon = _save_icon(upload)
-        except ValueError as exc:
+            elif icon_url:
+                icon = _download_icon(icon_url, name)
+        except (ValueError, urllib.error.URLError, OSError) as exc:
             flash(str(exc), 'error')
             return render_template('admin/project_form.html', project=project,
                                    form=request.form)
@@ -205,6 +249,21 @@ def api_projects_upsert():
         if not isinstance(item, dict):
             errors.append({'index': i, 'error': 'No es un objeto.'})
             continue
+        # icon_url is resolved before validation because it populates `icon`
+        # (downloaded to the durable folder). It needs a name for the filename.
+        icon_url = str(item.get('icon_url') or '').strip()
+        if icon_url:
+            name_for_icon = str(item.get('name') or '').strip()
+            if not name_for_icon:
+                errors.append({'index': i, 'name': item.get('name'),
+                               'error': 'icon_url requiere name.'})
+                continue
+            try:
+                item['icon'] = _download_icon(icon_url, name_for_icon)
+            except (ValueError, urllib.error.URLError, OSError) as exc:
+                errors.append({'index': i, 'name': item.get('name'),
+                               'error': f'icon_url: {exc}'})
+                continue
         missing = [f for f in _PROJECT_REQUIRED if not str(item.get(f) or '').strip()]
         if missing:
             errors.append({'index': i, 'name': item.get('name'),

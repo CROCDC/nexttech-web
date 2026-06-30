@@ -14,6 +14,42 @@ from app.models.job_opening import JobTypeEnum
 
 
 def register_routes(app):
+    def project_icon_url(icon):
+        """URL for a project icon: from the durable volume when it lives there,
+        else the bundled static asset (legacy icons committed in the image).
+        Both paths get a ?v=<mtime> cache-buster so a fresh icon = a fresh URL."""
+        if not icon:
+            return ''
+        stored = os.path.join(app.config['PROJECT_ICONS_FOLDER'], icon)
+        if os.path.isfile(stored):
+            return url_for('project_icon', filename=icon, v=int(os.path.getmtime(stored)))
+        return url_for('static', filename=f'assets/projects/{icon}')
+
+    app.add_template_global(project_icon_url, 'project_icon_url')
+
+    @app.route('/media/projects/<path:filename>')
+    def project_icon(filename):
+        """Serve project icons from the durable uploads volume, falling back to
+        the bundled static dir for the legacy committed icons."""
+        safe = secure_filename(filename)
+        if not safe:
+            abort(404)
+        stored_dir = app.config['PROJECT_ICONS_FOLDER']
+        static_dir = os.path.join(app.static_folder, 'assets', 'projects')
+        if os.path.isfile(os.path.join(stored_dir, safe)):
+            response = send_from_directory(stored_dir, safe)
+        elif os.path.isfile(os.path.join(static_dir, safe)):
+            response = send_from_directory(static_dir, safe)
+        else:
+            abort(404)
+        # A versioned URL (?v=<mtime>) is immutable; without it, a short TTL so
+        # edits still propagate. Mirrors set_static_cache_headers for /static/.
+        if request.args.get('v'):
+            response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+        else:
+            response.headers['Cache-Control'] = 'public, max-age=604800'
+        return response
+
     @app.route('/')
     def index():
         return render_template('index.html', featured_projects=ProjectRepository.get_featured())

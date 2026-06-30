@@ -72,7 +72,7 @@
                     {% set stagger = ['', 'd1', 'd2'][loop.index0 % 3] %}
                     <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer" class="project-card reveal {{ stagger }}{{ ' project-card--wip' if p.work_in_progress }}">
                         {% if p.work_in_progress %}<span class="wip-badge"><span class="wip-dot" aria-hidden="true"></span> En desarrollo</span>{% endif %}
-                        <span class="project-icon{{ ' project-icon--round' if p.round_icon }}"><img src="{{ url_for('static', filename='assets/projects/' ~ p.icon) }}" alt="{{ p.name }}" width="58" height="58" loading="lazy"></span>
+                        <span class="project-icon{{ ' project-icon--round' if p.round_icon }}"><img src="{{ project_icon_url(p.icon) }}" alt="{{ p.name }}" width="58" height="58" loading="lazy"></span>
                         <h3>{{ p.name }}</h3>
                         <p>{{ p.description }}</p>
                         <span class="project-link">Visitar sitio <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span>

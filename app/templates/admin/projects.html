@@ -22,7 +22,7 @@
             <td class="drag-handle" title="Arrastrar para reordenar" aria-label="Arrastrar para reordenar">⠿</td>
             <td class="muted pos-cell">{{ loop.index }}</td>
             <td><img class="icon-thumb {{ 'round' if p.round_icon }}"
-                     src="{{ url_for('static', filename='assets/projects/' ~ p.icon) }}" alt=""></td>
+                     src="{{ project_icon_url(p.icon) }}" alt=""></td>
             <td>{{ p.name }}</td>
             <td class="muted"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.url | truncate(40) }}</a></td>
             <td>{% if p.work_in_progress %}<span class="tag on">En desarrollo</span>{% else %}<span class="tag">Live</span>{% endif %}</td>

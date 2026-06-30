@@ -23,6 +23,13 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER') or os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance', 'uploads')
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+    # Project icons live on the same durable volume as the uploads (not baked
+    # into the image), so they survive rebuilds and can be added via the admin
+    # API/form without a deploy. Legacy icons committed under
+    # static/assets/projects/ keep working through project_icon_url()'s fallback.
+    app.config['PROJECT_ICONS_FOLDER'] = os.path.join(app.config['UPLOAD_FOLDER'], 'projects')
+    os.makedirs(app.config['PROJECT_ICONS_FOLDER'], exist_ok=True)
+
     # Analytics (Umami) - el Website ID es público y actúa de interruptor
     # (sin valor en dev => no se trackea). La URL del script es constante y va
     # hardcodeada en los templates.

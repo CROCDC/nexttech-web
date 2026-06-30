@@ -22,6 +22,7 @@ Conventions for *how* to add one (factory → routes → repository → model) l
 | GET | `/projects` | — | Full projects grid (`ProjectRepository.get_all()`, ordered by `sort_order`). |
 | GET | `/work-with-us` | — | Open job listings page (`JobOpeningRepository.get_all()`). |
 | GET | `/reportes/<slug>` | path: `slug` | Renders a web report from `app/reports/<slug>/`. `404` if the slug is unknown/invalid. Builds absolute Open Graph URLs. |
+| GET | `/media/projects/<filename>` | path: `filename` | Serves a project icon from the durable uploads volume (`PROJECT_ICONS_FOLDER`), falling back to the bundled `static/assets/projects/` for legacy icons. `404` if missing. Templates build these URLs via the `project_icon_url()` helper (with a `?v=<mtime>` cache-buster). |
 | GET | `/robots.txt` | — | Serves the static `robots.txt`. |
 | GET | `/sitemap.xml` | — | Serves the static `sitemap.xml`. |
 | POST | `/send-message` | JSON: `name`, `email`, `message` | Stores a contact message. Returns `{success, message, data}`. `500` on error. |
@@ -74,8 +75,19 @@ All `/admin/*` routes (including the JSON API) are guarded by HTTP **Basic Auth*
 
 Project form / API fields — required: `name`, `url`, `icon`, `description`.
 Optional: `short_description` (home blurb), `round_icon`, `featured`,
-`work_in_progress`, `sort_order`, `featured_order`. The form also accepts an
-uploaded `icon_file` (SVG/PNG/JPG/WEBP/GIF) saved to `static/assets/projects/`.
+`work_in_progress`, `sort_order`, `featured_order`.
+
+**Supplying the icon (3 ways, no deploy needed):**
+- `icon` — filename of an icon that already exists (durable volume or a legacy
+  bundled icon under `static/assets/projects/`).
+- `icon_file` — file upload (form only; SVG/PNG/JPG/WEBP/GIF).
+- `icon_url` — image URL the server downloads (form **and** JSON API). Validated
+  by content-type/extension, capped at 5 MB, stored under a name derived from the
+  project name. This makes `POST /admin/api/projects` fully self-sufficient: one
+  call creates the project **and** fetches its icon.
+
+New icons are written to `PROJECT_ICONS_FOLDER` (on the `uploads_data` volume),
+so they survive image rebuilds — adding a project no longer requires a deploy.
 
 ### Inquiries (consultas)
 

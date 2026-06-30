@@ -34,12 +34,13 @@
     <div class="field">
         <label for="icon_file">Ícono</label>
         <input type="file" id="icon_file" name="icon_file" accept=".svg,.png,.jpg,.jpeg,.webp,.gif">
-        <div class="hint">Subí una imagen nueva, o indicá abajo el nombre de un archivo ya existente en
-            <code>assets/projects/</code>.</div>
-        <input type="text" name="icon" value="{{ val('icon') }}" placeholder="ej: gluck.webp" style="margin-top:.5rem;">
+        <div class="hint">Subí una imagen, pegá una URL de imagen para descargarla, o indicá el nombre
+            de un ícono ya existente. Las imágenes nuevas se guardan en el volumen (persisten sin deploy).</div>
+        <input type="url" name="icon_url" value="" placeholder="o pegá una URL de imagen" style="margin-top:.5rem;">
+        <input type="text" name="icon" value="{{ val('icon') }}" placeholder="o nombre de archivo, ej: gluck.webp" style="margin-top:.5rem;">
         {% if project and project.icon %}
         <div class="hint">Actual: <img class="icon-thumb {{ 'round' if project.round_icon }}"
-            src="{{ url_for('static', filename='assets/projects/' ~ project.icon) }}" alt="" style="vertical-align:middle;"> {{ project.icon }}</div>
+            src="{{ project_icon_url(project.icon) }}" alt="" style="vertical-align:middle;"> {{ project.icon }}</div>
         {% endif %}
     </div>
 
