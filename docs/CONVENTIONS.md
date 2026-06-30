@@ -114,8 +114,13 @@ Naming: `XxxRepository` with methods like `get_all`, `get_by_id`, `save`, `creat
 
 ## 6. Routes (`app/routes.py`)
 
-- Single public function: `register_routes(app)`.
-- All route decorators use `@app.route(...)` inside this function.
+> For the full list of live endpoints (public + admin), see [`ENDPOINTS.md`](ENDPOINTS.md).
+
+- Public routes live in `app/routes.py` via `register_routes(app)`.
+- Larger feature areas use a blueprint: the admin panel is `admin_bp` in
+  `app/admin/` (prefix `/admin`, guarded by Basic Auth in `app/admin/auth.py`),
+  registered from the factory. Add new self-contained areas the same way.
+- All route decorators use `@app.route(...)` (or `@admin_bp.route(...)`).
 - Handlers:
   - Parse request (JSON, form, files).
   - Validate required fields and return 400 with a clear message when invalid.

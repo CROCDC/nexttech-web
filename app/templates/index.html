@@ -128,6 +128,35 @@
             </div>
         </section>
 
+        <!-- PROYECTOS DESTACADOS -->
+        <section id="proyectos" class="section" aria-labelledby="proyectos-titulo">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Portfolio</span>
+                    <h2 id="proyectos-titulo" class="section-title">Proyectos Destacados</h2>
+                    <p class="section-subtitle">Una muestra de lo que construimos para nuestros clientes.</p>
+                </div>
+                <div class="projects-scroller-wrap reveal">
+                    <button class="scroller-btn prev" type="button" aria-label="Proyectos anteriores"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+                    <button class="scroller-btn next" type="button" aria-label="Más proyectos"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+                    <div class="projects-scroller" id="featuredProjects">
+                    {% for p in featured_projects %}
+                    <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer" class="project-card{{ ' project-card--wip' if p.work_in_progress }}">
+                        {% if p.work_in_progress %}<span class="wip-badge"><span class="wip-dot" aria-hidden="true"></span> En desarrollo</span>{% endif %}
+                        <span class="project-icon{{ ' project-icon--round' if p.round_icon }}"><img src="{{ url_for('static', filename='assets/projects/' ~ p.icon) }}" alt="{{ p.name }}" width="58" height="58" loading="lazy"></span>
+                        <h3>{{ p.name }}</h3>
+                        <p>{{ p.home_description }}</p>
+                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
+                    {% endfor %}
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:2.5rem;" class="reveal">
+                    <a href="/projects" class="btn btn-ghost">Ver todos los proyectos <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </section>
+
         <!-- SERVICIOS -->
         <section id="servicios" class="section services" aria-labelledby="servicios-titulo">
             <div class="container">
@@ -268,35 +297,6 @@
                     <span class="tech-chip"><i class="fab fa-aws" aria-hidden="true"></i> AWS</span>
                     <span class="tech-chip"><i class="fab fa-docker" aria-hidden="true"></i> Docker</span>
                     <span class="tech-chip"><i class="fab fa-figma" aria-hidden="true"></i> Figma</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROYECTOS DESTACADOS -->
-        <section id="proyectos" class="section" aria-labelledby="proyectos-titulo">
-            <div class="container">
-                <div class="section-head reveal">
-                    <span class="eyebrow">Portfolio</span>
-                    <h2 id="proyectos-titulo" class="section-title">Proyectos Destacados</h2>
-                    <p class="section-subtitle">Una muestra de lo que construimos para nuestros clientes.</p>
-                </div>
-                <div class="projects-scroller-wrap reveal">
-                    <button class="scroller-btn prev" type="button" aria-label="Proyectos anteriores"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
-                    <button class="scroller-btn next" type="button" aria-label="Más proyectos"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
-                    <div class="projects-scroller" id="featuredProjects">
-                    {% for p in featured_projects %}
-                    <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer" class="project-card{{ ' project-card--wip' if p.work_in_progress }}">
-                        {% if p.work_in_progress %}<span class="wip-badge"><span class="wip-dot" aria-hidden="true"></span> En desarrollo</span>{% endif %}
-                        <span class="project-icon{{ ' project-icon--round' if p.round_icon }}"><img src="{{ url_for('static', filename='assets/projects/' ~ p.icon) }}" alt="{{ p.name }}" width="58" height="58" loading="lazy"></span>
-                        <h3>{{ p.name }}</h3>
-                        <p>{{ p.home_description }}</p>
-                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
-                    {% endfor %}
-                    </div>
-                </div>
-                <div style="text-align:center; margin-top:2.5rem;" class="reveal">
-                    <a href="/projects" class="btn btn-ghost">Ver todos los proyectos <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                 </div>
             </div>
         </section>
