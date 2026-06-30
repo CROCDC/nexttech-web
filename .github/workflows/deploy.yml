@@ -39,12 +39,14 @@ jobs:
           CRUMB_HEADER=$(python3 -c "import json; d=json.load(open('crumb.json')); print(d['crumbRequestField'] + ': ' + d['crumb'])")
           echo "Using header: $CRUMB_HEADER"
 
-          # POST to trigger the job
+          # POST to trigger the job. Use buildWithParameters: the job is parameterized
+          # (INFISICAL_PROJECT_ID), and a parameterized job rejects plain /build with HTTP 400.
+          # Parameters not supplied here fall back to their defaults configured in the job.
           TRIGGER_CODE=$(curl -b cookie.txt -s -o /dev/null -w "%{http_code}" -X POST -H "$CRUMB_HEADER" -H "Content-Type: application/x-www-form-urlencoded" \
-            --data "" "https://jenkins.nexttech.com.ar/job/$JOB_NAME/build?token=$JENKINS_API_TOKEN" \
+            --data "" "https://jenkins.nexttech.com.ar/job/$JOB_NAME/buildWithParameters?token=$JENKINS_API_TOKEN" \
             --user "$JENKINS_USER:$JENKINS_PASSWORD")
           if [ "$TRIGGER_CODE" != "201" ] && [ "$TRIGGER_CODE" != "200" ]; then
-            echo "::error::Jenkins trigger failed (HTTP $TRIGGER_CODE). Check JOB_NAME ($JOB_NAME), token, and job exists."
+            echo "::error::Jenkins trigger failed (HTTP $TRIGGER_CODE). Check JOB_NAME ($JOB_NAME), token, and that the job exists/is parameterized."
             exit 1
           fi
           echo "Triggered Jenkins job (HTTP $TRIGGER_CODE)."
