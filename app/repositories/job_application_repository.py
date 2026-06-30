@@ -24,9 +24,14 @@ class JobApplicationRepository:
     @staticmethod
     def get_all():
         try:
-            return JobApplication.query.all()
+            return JobApplication.query.order_by(JobApplication.created_at.desc()).all()
         except Exception as e:
             raise Exception(f"Error al obtener las aplicaciones: {str(e)}")
+
+    @staticmethod
+    def delete(application):
+        db.session.delete(application)
+        db.session.commit()
 
     @staticmethod
     def get_by_id(application_id):

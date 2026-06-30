@@ -1,0 +1,35 @@
+{% extends 'admin/base.html' %}
+{% set active = 'postulaciones' %}
+{% block title %}Postulaciones{% endblock %}
+{% block content %}
+<h1>Postulaciones (CVs)</h1>
+
+{% if applications %}
+<table>
+    <thead>
+        <tr><th>Fecha</th><th>Nombre</th><th>Teléfono</th><th>Documento</th><th>CV</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for a in applications %}
+        <tr>
+            <td class="muted">{{ a.created_at.strftime('%d/%m/%Y %H:%M') if a.created_at else '' }}</td>
+            <td>{{ a.full_name }}</td>
+            <td class="muted">{{ a.phone }}</td>
+            <td class="muted">{{ a.document_id }}</td>
+            <td><a class="btn btn-sm" href="{{ url_for('admin.application_cv', application_id=a.id) }}">Descargar PDF</a></td>
+            <td>
+                <div class="actions">
+                    <form class="inline" method="post" action="{{ url_for('admin.application_delete', application_id=a.id) }}"
+                          onsubmit="return confirm('¿Eliminar esta postulación y su CV?');">
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty">No hay postulaciones todavía.</div>
+{% endif %}
+{% endblock %}

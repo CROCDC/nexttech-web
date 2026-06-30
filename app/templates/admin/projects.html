@@ -1,0 +1,106 @@
+{% extends 'admin/base.html' %}
+{% set active = 'proyectos' %}
+{% block title %}Proyectos{% endblock %}
+{% block content %}
+<div class="topbar">
+    <h1 style="margin:0;">Proyectos</h1>
+    <a class="btn btn-primary" href="{{ url_for('admin.project_form') }}">+ Nuevo proyecto</a>
+</div>
+
+{% if projects %}
+<p class="muted" style="margin:-0.4rem 0 1rem; font-size:.85rem;">
+    Arrastrá las filas desde <span aria-hidden="true">⠿</span> para cambiar el orden en que se muestran en la web.
+    <span id="reorder-status"></span>
+</p>
+<table id="projects-table">
+    <thead>
+        <tr><th></th><th>#</th><th></th><th>Nombre</th><th>URL</th><th>Estado</th><th>Destacado</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for p in projects %}
+        <tr draggable="true" data-id="{{ p.id }}">
+            <td class="drag-handle" title="Arrastrar para reordenar" aria-label="Arrastrar para reordenar">⠿</td>
+            <td class="muted pos-cell">{{ loop.index }}</td>
+            <td><img class="icon-thumb {{ 'round' if p.round_icon }}"
+                     src="{{ url_for('static', filename='assets/projects/' ~ p.icon) }}" alt=""></td>
+            <td>{{ p.name }}</td>
+            <td class="muted"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.url | truncate(40) }}</a></td>
+            <td>{% if p.work_in_progress %}<span class="tag on">En desarrollo</span>{% else %}<span class="tag">Live</span>{% endif %}</td>
+            <td>{% if p.featured %}<span class="tag on">Destacado #{{ p.featured_order }}</span>{% else %}<span class="tag">No</span>{% endif %}</td>
+            <td>
+                <div class="actions">
+                    <a class="btn btn-sm" href="{{ url_for('admin.project_form', project_id=p.id) }}">Editar</a>
+                    <form class="inline" method="post" action="{{ url_for('admin.project_delete', project_id=p.id) }}"
+                          onsubmit="return confirm('¿Eliminar «{{ p.name }}»?');">
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+(function () {
+    const tbody = document.querySelector('#projects-table tbody');
+    const status = document.getElementById('reorder-status');
+    let dragRow = null;
+
+    function rowAfter(y) {
+        const rows = [...tbody.querySelectorAll('tr:not(.dragging)')];
+        return rows.reduce((closest, row) => {
+            const box = row.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) return { offset, row };
+            return closest;
+        }, { offset: Number.NEGATIVE_INFINITY, row: null }).row;
+    }
+
+    function renumber() {
+        tbody.querySelectorAll('tr').forEach((row, i) => {
+            const cell = row.querySelector('.pos-cell');
+            if (cell) cell.textContent = i + 1;
+        });
+    }
+
+    async function persist() {
+        const order = [...tbody.querySelectorAll('tr')].map(r => Number(r.dataset.id));
+        status.textContent = ' · guardando…';
+        try {
+            const res = await fetch('{{ url_for('admin.project_reorder') }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order })
+            });
+            status.textContent = res.ok ? ' · orden guardado ✓' : ' · error al guardar';
+        } catch (e) {
+            status.textContent = ' · error al guardar';
+        }
+        setTimeout(() => { status.textContent = ''; }, 2500);
+    }
+
+    tbody.addEventListener('dragstart', e => {
+        dragRow = e.target.closest('tr');
+        if (dragRow) dragRow.classList.add('dragging');
+    });
+    tbody.addEventListener('dragend', () => {
+        if (!dragRow) return;
+        dragRow.classList.remove('dragging');
+        dragRow = null;
+        renumber();
+        persist();
+    });
+    tbody.addEventListener('dragover', e => {
+        e.preventDefault();
+        if (!dragRow) return;
+        const after = rowAfter(e.clientY);
+        if (after == null) tbody.appendChild(dragRow);
+        else tbody.insertBefore(dragRow, after);
+    });
+})();
+</script>
+{% else %}
+<div class="empty">No hay proyectos cargados.</div>
+{% endif %}
+{% endblock %}

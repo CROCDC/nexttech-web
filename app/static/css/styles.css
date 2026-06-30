@@ -352,6 +352,36 @@ section[id] { scroll-margin-top: 80px; }
 }
 .project-card:hover .project-link { gap: 0.65rem; }
 
+/* Work in progress: brand-gradient frame + animated "En desarrollo" badge */
+.project-card--wip {
+    background:
+        linear-gradient(var(--surface), var(--surface)) padding-box,
+        var(--grad-hero) border-box;
+    border: 1px solid transparent;
+}
+.project-card--wip:hover { border-color: transparent; }
+.wip-badge {
+    position: absolute; top: 1rem; right: 1rem; z-index: 2;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.3rem 0.62rem; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.01em; color: var(--text);
+    background: rgba(34, 211, 238, 0.12); border: 1px solid rgba(34, 211, 238, 0.35);
+    backdrop-filter: blur(6px);
+}
+.wip-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--cyan);
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.55);
+    animation: wipPulse 1.8s var(--ease) infinite;
+}
+@keyframes wipPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.55); }
+    70%  { box-shadow: 0 0 0 7px rgba(34, 211, 238, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .wip-dot { animation: none; }
+}
+
 /* Horizontal scroller (home "Proyectos Destacados") — one row, shorter page */
 .projects-scroller-wrap { position: relative; }
 .projects-scroller {

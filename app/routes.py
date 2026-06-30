@@ -8,6 +8,7 @@ from app.models import JobApplication
 from app.repositories.contact_repository import ContactMessageRepository
 from app.repositories.job_application_repository import JobApplicationRepository
 from app.repositories.job_opening_repository import JobOpeningRepository
+from app.repositories.project_repository import ProjectRepository
 from app.repositories.report_repository import ReportRepository
 from app.models.job_opening import JobTypeEnum
 
@@ -15,7 +16,7 @@ from app.models.job_opening import JobTypeEnum
 def register_routes(app):
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('index.html', featured_projects=ProjectRepository.get_featured())
 
     @app.route('/robots.txt')
     def robots():
@@ -50,7 +51,7 @@ def register_routes(app):
 
     @app.route('/projects')
     def projects():
-        return render_template('projects.html')
+        return render_template('projects.html', projects=ProjectRepository.get_all())
 
     @app.route('/reportes/<slug>')
     def report(slug):

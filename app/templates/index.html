@@ -70,7 +70,7 @@
             "addressCountry": "AR"
         },
         "sameAs": [
-            "https://www.instagram.com/pan__tech/"
+            "https://www.linkedin.com/company/135304629"
         ],
         "offers": {
             "@type": "Offer",
@@ -284,42 +284,15 @@
                     <button class="scroller-btn prev" type="button" aria-label="Proyectos anteriores"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
                     <button class="scroller-btn next" type="button" aria-label="Más proyectos"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
                     <div class="projects-scroller" id="featuredProjects">
-                    <a href="https://9del12.com/" target="_blank" rel="noopener noreferrer" class="project-card">
-                        <span class="project-icon"><img src="{{ url_for('static', filename='assets/projects/9del12.svg') }}" alt="9 del 12" width="58" height="58" loading="lazy"></span>
-                        <h3>9 del 12</h3>
-                        <p>Sitio conmemorativo de la cuarta Copa Libertadores de River: crónicas, galería y el camino a la gloria.</p>
+                    {% for p in featured_projects %}
+                    <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer" class="project-card{{ ' project-card--wip' if p.work_in_progress }}">
+                        {% if p.work_in_progress %}<span class="wip-badge"><span class="wip-dot" aria-hidden="true"></span> En desarrollo</span>{% endif %}
+                        <span class="project-icon{{ ' project-icon--round' if p.round_icon }}"><img src="{{ url_for('static', filename='assets/projects/' ~ p.icon) }}" alt="{{ p.name }}" width="58" height="58" loading="lazy"></span>
+                        <h3>{{ p.name }}</h3>
+                        <p>{{ p.home_description }}</p>
                         <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
                     </a>
-                    <a href="https://gluck.nexttech.com.ar/" target="_blank" rel="noopener noreferrer" class="project-card">
-                        <span class="project-icon project-icon--round"><img src="{{ url_for('static', filename='assets/projects/gluck.webp') }}" alt="GLÜCK" width="58" height="58" loading="lazy"></span>
-                        <h3>GLÜCK</h3>
-                        <p>E-commerce de bolsos y carteras de cuero vegano, hechos a mano. Diseño atemporal y artesanal.</p>
-                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
-                    <a href="https://trackproduce.nexttech.com.ar/" target="_blank" rel="noopener noreferrer" class="project-card">
-                        <span class="project-icon"><img src="{{ url_for('static', filename='assets/projects/trackproduce.png') }}" alt="Track Produce" width="58" height="58" loading="lazy"></span>
-                        <h3>Track Produce</h3>
-                        <p>Productora audiovisual y musical en Buenos Aires: videoclips, shows en vivo y eventos.</p>
-                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
-                    <a href="https://kailuasailing.com.ar/" target="_blank" rel="noopener noreferrer" class="project-card">
-                        <span class="project-icon"><img src="{{ url_for('static', filename='assets/projects/kailua.svg') }}" alt="Kailua Sailing" width="58" height="58" loading="lazy"></span>
-                        <h3>Kailua Sailing</h3>
-                        <p>Charters y paseos en velero en el Río de la Plata. Experiencias a medida desde San Isidro.</p>
-                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
-                    <a href="https://chaac.nexttech.com.ar/" target="_blank" rel="noopener noreferrer" class="project-card">
-                        <span class="project-icon"><img src="{{ url_for('static', filename='assets/projects/chaac.svg') }}" alt="Chaac" width="58" height="58" loading="lazy"></span>
-                        <h3>Chaac</h3>
-                        <p>Plataforma para preparar el examen náutico deportivo: normativa, señales, meteorología y más.</p>
-                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
-                    <a href="https://elpampero.com.ar/" target="_blank" rel="noopener noreferrer" class="project-card">
-                        <span class="project-icon"><img src="{{ url_for('static', filename='assets/projects/elpampero.png') }}" alt="El Pampero" width="58" height="58" loading="lazy"></span>
-                        <h3>El Pampero</h3>
-                        <p>Náutica, cultura y río: notas marineras e historias para preservar el patrimonio fluvial.</p>
-                        <span class="project-link">Ver proyecto <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
+                    {% endfor %}
                     </div>
                 </div>
                 <div style="text-align:center; margin-top:2.5rem;" class="reveal">

@@ -2,3 +2,4 @@
 from app.models.contact import ContactMessage
 from app.models.job_application import JobApplication
 from app.models.job_opening import JobOpening
+from app.models.project import Project

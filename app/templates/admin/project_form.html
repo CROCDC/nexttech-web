@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+{% set active = 'proyectos' %}
+{% block title %}{{ 'Editar' if project else 'Nuevo' }} proyecto{% endblock %}
+
+{# Field values come from the resubmitted form (on validation error), else the
+   existing project (edit), else empty (new). #}
+{% macro val(field) %}{{ form.get(field) if form else (project|attr(field) if project else '') }}{% endmacro %}
+{% set checked_round = form.get('round_icon') if form is not none else (project.round_icon if project else false) %}
+{% set checked_featured = form.get('featured') if form is not none else (project.featured if project else false) %}
+{% set checked_wip = form.get('work_in_progress') if form is not none else (project.work_in_progress if project else false) %}
+
+{% block content %}
+<h1>{{ 'Editar' if project else 'Nuevo' }} proyecto</h1>
+
+<form class="stack" method="post" enctype="multipart/form-data">
+    <div class="field">
+        <label for="name">Nombre</label>
+        <input type="text" id="name" name="name" value="{{ val('name') }}" required>
+    </div>
+    <div class="field">
+        <label for="url">URL del sitio</label>
+        <input type="url" id="url" name="url" value="{{ val('url') }}" placeholder="https://..." required>
+    </div>
+    <div class="field">
+        <label for="description">Descripción (página de proyectos)</label>
+        <textarea id="description" name="description" required>{{ val('description') }}</textarea>
+    </div>
+    <div class="field">
+        <label for="short_description">Descripción corta (home destacados)</label>
+        <textarea id="short_description" name="short_description">{{ val('short_description') }}</textarea>
+        <div class="hint">Opcional. Si queda vacía se usa la descripción larga en la home.</div>
+    </div>
+
+    <div class="field">
+        <label for="icon_file">Ícono</label>
+        <input type="file" id="icon_file" name="icon_file" accept=".svg,.png,.jpg,.jpeg,.webp,.gif">
+        <div class="hint">Subí una imagen nueva, o indicá abajo el nombre de un archivo ya existente en
+            <code>assets/projects/</code>.</div>
+        <input type="text" name="icon" value="{{ val('icon') }}" placeholder="ej: gluck.webp" style="margin-top:.5rem;">
+        {% if project and project.icon %}
+        <div class="hint">Actual: <img class="icon-thumb {{ 'round' if project.round_icon }}"
+            src="{{ url_for('static', filename='assets/projects/' ~ project.icon) }}" alt="" style="vertical-align:middle;"> {{ project.icon }}</div>
+        {% endif %}
+    </div>
+
+    <label class="check"><input type="checkbox" name="round_icon" {{ 'checked' if checked_round }}> Ícono redondo</label>
+    <label class="check"><input type="checkbox" name="featured" {{ 'checked' if checked_featured }}> Mostrar en destacados de la home</label>
+    <label class="check"><input type="checkbox" name="work_in_progress" {{ 'checked' if checked_wip }}> En desarrollo (work in progress)</label>
+
+    <div class="row">
+        <div class="field">
+            <label for="sort_order">Orden en página de proyectos</label>
+            <input type="number" id="sort_order" name="sort_order" value="{{ val('sort_order') or 0 }}">
+        </div>
+        <div class="field">
+            <label for="featured_order">Orden en destacados (home)</label>
+            <input type="number" id="featured_order" name="featured_order" value="{{ val('featured_order') or 0 }}">
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <a class="btn" href="{{ url_for('admin.projects') }}">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

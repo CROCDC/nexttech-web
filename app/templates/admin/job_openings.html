@@ -1,0 +1,37 @@
+{% extends 'admin/base.html' %}
+{% set active = 'busquedas' %}
+{% block title %}Búsquedas abiertas{% endblock %}
+{% block content %}
+<div class="topbar">
+    <h1 style="margin:0;">Búsquedas abiertas</h1>
+    <a class="btn btn-primary" href="{{ url_for('admin.job_opening_form') }}">+ Nueva búsqueda</a>
+</div>
+
+{% if job_openings %}
+<table>
+    <thead>
+        <tr><th>Título</th><th>Tipo</th><th>Descripción</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for o in job_openings %}
+        <tr>
+            <td>{{ o.title }}</td>
+            <td><span class="tag">{{ o.job_type.label }}</span></td>
+            <td class="muted">{{ o.description | truncate(90) }}</td>
+            <td>
+                <div class="actions">
+                    <a class="btn btn-sm" href="{{ url_for('admin.job_opening_form', opening_id=o.id) }}">Editar</a>
+                    <form class="inline" method="post" action="{{ url_for('admin.job_opening_delete', opening_id=o.id) }}"
+                          onsubmit="return confirm('¿Eliminar esta búsqueda?');">
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty">No hay búsquedas abiertas todavía.</div>
+{% endif %}
+{% endblock %}

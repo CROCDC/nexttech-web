@@ -1,0 +1,34 @@
+{% extends 'admin/base.html' %}
+{% set active = 'consultas' %}
+{% block title %}Consultas{% endblock %}
+{% block content %}
+<h1>Consultas</h1>
+
+{% if messages %}
+<table>
+    <thead>
+        <tr><th>Fecha</th><th>Nombre</th><th>Email</th><th>Mensaje</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for m in messages %}
+        <tr>
+            <td class="muted">{{ m.created_at.strftime('%d/%m/%Y %H:%M') if m.created_at else '' }}</td>
+            <td>{{ m.name }}</td>
+            <td><a href="mailto:{{ m.email }}">{{ m.email }}</a></td>
+            <td>{{ m.message }}</td>
+            <td>
+                <div class="actions">
+                    <form class="inline" method="post" action="{{ url_for('admin.contact_delete', message_id=m.id) }}"
+                          onsubmit="return confirm('¿Eliminar esta consulta?');">
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty">No hay consultas todavía.</div>
+{% endif %}
+{% endblock %}

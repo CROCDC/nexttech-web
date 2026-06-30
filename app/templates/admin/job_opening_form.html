@@ -1,0 +1,29 @@
+{% extends 'admin/base.html' %}
+{% set active = 'busquedas' %}
+{% block title %}{{ 'Editar' if opening else 'Nueva' }} búsqueda{% endblock %}
+{% block content %}
+<h1>{{ 'Editar' if opening else 'Nueva' }} búsqueda</h1>
+
+<form class="stack" method="post">
+    <div class="field">
+        <label for="title">Título</label>
+        <input type="text" id="title" name="title" value="{{ opening.title if opening else '' }}" required>
+    </div>
+    <div class="field">
+        <label for="job_type">Tipo</label>
+        <select id="job_type" name="job_type" required>
+            {% for t in job_types %}
+            <option value="{{ t.name }}" {{ 'selected' if opening and opening.job_type == t }}>{{ t.label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="field">
+        <label for="description">Descripción</label>
+        <textarea id="description" name="description" required>{{ opening.description if opening else '' }}</textarea>
+    </div>
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <a class="btn" href="{{ url_for('admin.job_openings') }}">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

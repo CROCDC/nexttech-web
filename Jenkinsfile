@@ -41,7 +41,33 @@ pipeline {
           }
           sh buildCmd
         }
-        sh "docker compose -f ${COMPOSE_FILE} up -d"
+        script {
+          // Inject secrets via Infisical when the job has INFISICAL_PROJECT_ID set;
+          // otherwise fall back to a plain `up` (so the pipeline still works without it).
+          def projectId = params.INFISICAL_PROJECT_ID?.trim()
+          if (projectId) {
+            withCredentials([
+              string(credentialsId: 'infisical-client-id',     variable: 'INFISICAL_CLIENT_ID'),
+              string(credentialsId: 'infisical-client-secret', variable: 'INFISICAL_CLIENT_SECRET')
+            ]) {
+              sh """
+                INFISICAL_TOKEN=\$(INFISICAL_DISABLE_UPDATE_CHECK=true \
+                  infisical login --method=universal-auth \
+                    --client-id="\$INFISICAL_CLIENT_ID" \
+                    --client-secret="\$INFISICAL_CLIENT_SECRET" \
+                    --domain=https://infisical.nexttech.com.ar \
+                    --plain --silent)
+                INFISICAL_DISABLE_UPDATE_CHECK=true \
+                INFISICAL_TOKEN="\$INFISICAL_TOKEN" \
+                infisical run --env prod --projectId ${projectId} \
+                  --domain=https://infisical.nexttech.com.ar \
+                  -- docker compose -f ${COMPOSE_FILE} up -d
+              """
+            }
+          } else {
+            sh "docker compose -f ${COMPOSE_FILE} up -d"
+          }
+        }
       }
     }
   }

@@ -1,0 +1,24 @@
+{% extends 'admin/base.html' %}
+{% set active = 'dashboard' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<h1>Panel de administración</h1>
+<div class="cards">
+    <a class="card" href="{{ url_for('admin.job_openings') }}">
+        <div class="num">{{ counts.job_openings }}</div>
+        <div class="lbl">Búsquedas abiertas</div>
+    </a>
+    <a class="card" href="{{ url_for('admin.projects') }}">
+        <div class="num">{{ counts.projects }}</div>
+        <div class="lbl">Proyectos</div>
+    </a>
+    <a class="card" href="{{ url_for('admin.contacts') }}">
+        <div class="num">{{ counts.contacts }}</div>
+        <div class="lbl">Consultas</div>
+    </a>
+    <a class="card" href="{{ url_for('admin.applications') }}">
+        <div class="num">{{ counts.applications }}</div>
+        <div class="lbl">Postulaciones (CVs)</div>
+    </a>
+</div>
+{% endblock %}

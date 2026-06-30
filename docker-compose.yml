@@ -8,7 +8,13 @@ services:
     environment:
       - FLASK_APP=run.py
       - FLASK_DEBUG=0
-      - DATABASE_URL=postgresql://nexttech:RUNSUMnimObjEWerManSIAHORpHicaTt@nexttech-web-db:5432/nexttech
+      # Secrets (POSTGRES_PASSWORD, SECRET_KEY, ADMIN_*) are injected at deploy
+      # time by `infisical run` (see Jenkinsfile). The db host is the unique
+      # container name, not `db`, to avoid the shared-proxy DNS alias collision.
+      - DATABASE_URL=postgresql://nexttech:${POSTGRES_PASSWORD}@nexttech-web-db:5432/nexttech
+      - SECRET_KEY=${SECRET_KEY}
+      - ADMIN_USER=${ADMIN_USER}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - UPLOAD_FOLDER=/nexttech/uploads
       - VIRTUAL_HOST=nexttech.com.ar,www.nexttech.com.ar
       - VIRTUAL_PORT=7001
@@ -34,7 +40,7 @@ services:
     image: postgres:16
     environment:
       - POSTGRES_USER=nexttech
-      - POSTGRES_PASSWORD=RUNSUMnimObjEWerManSIAHORpHicaTt
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=nexttech
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -53,7 +59,7 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     environment:
-      - DATA_SOURCE_NAME=postgresql://nexttech:RUNSUMnimObjEWerManSIAHORpHicaTt@nexttech-web-db:5432/nexttech?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://nexttech:${POSTGRES_PASSWORD}@nexttech-web-db:5432/nexttech?sslmode=disable
     ports:
       - "9187:9187"
     depends_on:

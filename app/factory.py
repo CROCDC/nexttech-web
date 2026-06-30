@@ -27,7 +27,16 @@ def create_app():
     # (sin valor en dev => no se trackea). La URL del script es constante y va
     # hardcodeada en los templates.
     app.config['UMAMI_WEBSITE_ID'] = os.environ.get('UMAMI_WEBSITE_ID')
-    
+
+    # Admin: protegido por HTTP Basic Auth con credenciales de entorno. Sin
+    # ADMIN_PASSWORD el panel queda deshabilitado (responde 503). SECRET_KEY
+    # sólo se usa para los mensajes flash del panel.
+    app.config['ADMIN_USER'] = os.environ.get('ADMIN_USER', 'admin')
+    app.config['ADMIN_PASSWORD'] = os.environ.get('ADMIN_PASSWORD')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    # Tope de subida (CVs en PDF, íconos de proyectos): 16 MB.
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
     # Inicializar extensiones
     db.init_app(app)
     migrate.init_app(app, db)
@@ -72,7 +81,11 @@ def create_app():
 
     with app.app_context():
         from app.routes import register_routes
+        from app.admin import admin_bp
+        from app.seeds import seed_projects
         register_routes(app)
+        app.register_blueprint(admin_bp)
         db.create_all()
-    
-    return app 
+        seed_projects()
+
+    return app
