@@ -39,3 +39,10 @@ class ProjectRepository:
     @staticmethod
     def count():
         return Project.query.count()
+
+    @staticmethod
+    def next_featured_order():
+        """Order value that places a newly featured project after the current ones."""
+        current_max = (db.session.query(db.func.max(Project.featured_order))
+                       .filter_by(featured=True).scalar())
+        return (current_max or 0) + 1

@@ -253,6 +253,24 @@ def project_reorder():
     return jsonify({'ok': True, 'count': len(order)})
 
 
+@admin_bp.route('/proyectos/<int:project_id>/destacado', methods=['POST'])
+def project_toggle_featured(project_id):
+    """Flip the featured flag from the list view (no need to open the form).
+
+    Turning it on appends the project to the end of the featured order so it
+    shows last on the home scroller until reordered.
+    """
+    project = ProjectRepository.get_by_id(project_id)
+    if project is None:
+        abort(404)
+    project.featured = not project.featured
+    if project.featured:
+        project.featured_order = ProjectRepository.next_featured_order()
+    ProjectRepository.save()
+    return jsonify({'ok': True, 'featured': project.featured,
+                    'featured_order': project.featured_order})
+
+
 @admin_bp.route('/proyectos/<int:project_id>/eliminar', methods=['POST'])
 def project_delete(project_id):
     project = ProjectRepository.get_by_id(project_id)

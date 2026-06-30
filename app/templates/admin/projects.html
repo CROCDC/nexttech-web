@@ -26,7 +26,13 @@
             <td>{{ p.name }}</td>
             <td class="muted"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.url | truncate(40) }}</a></td>
             <td>{% if p.work_in_progress %}<span class="tag on">En desarrollo</span>{% else %}<span class="tag">Live</span>{% endif %}</td>
-            <td>{% if p.featured %}<span class="tag on">Destacado #{{ p.featured_order }}</span>{% else %}<span class="tag">No</span>{% endif %}</td>
+            <td>
+                <button type="button" class="tag toggle-featured {{ 'on' if p.featured }}"
+                        data-id="{{ p.id }}" aria-pressed="{{ 'true' if p.featured else 'false' }}"
+                        title="Tocá para marcar/desmarcar como destacado">
+                    {% if p.featured %}Destacado #{{ p.featured_order }}{% else %}No{% endif %}
+                </button>
+            </td>
             <td>
                 <div class="actions">
                     <a class="btn btn-sm" href="{{ url_for('admin.project_form', project_id=p.id) }}">Editar</a>
@@ -97,6 +103,29 @@
         const after = rowAfter(e.clientY);
         if (after == null) tbody.appendChild(dragRow);
         else tbody.insertBefore(dragRow, after);
+    });
+
+    // Toggle "destacado" inline. The route id is templated with a placeholder
+    // and swapped per row so the blueprint prefix stays in one place.
+    const TOGGLE_URL = "{{ url_for('admin.project_toggle_featured', project_id=0) }}";
+    tbody.addEventListener('click', async e => {
+        const btn = e.target.closest('.toggle-featured');
+        if (!btn) return;
+        btn.disabled = true;
+        try {
+            const res = await fetch(TOGGLE_URL.replace('/0/', '/' + btn.dataset.id + '/'),
+                { method: 'POST' });
+            const data = await res.json();
+            if (data.ok) {
+                btn.classList.toggle('on', data.featured);
+                btn.setAttribute('aria-pressed', data.featured ? 'true' : 'false');
+                btn.textContent = data.featured ? ('Destacado #' + data.featured_order) : 'No';
+            }
+        } catch (err) {
+            /* keep the previous state on failure */
+        } finally {
+            btn.disabled = false;
+        }
     });
 })();
 </script>
