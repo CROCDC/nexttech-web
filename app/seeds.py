@@ -1,10 +1,10 @@
 """One-time data seeding.
 
-Projects used to be hardcoded in the templates; this seeds the same 15 into the
-DB so the public pages keep rendering after the move. It runs only when the
-`projects` table is empty, so it is safe to call on every startup and never
-clobbers admin edits. `featured`/`featured_order` reproduce the home scroller
-selection; `short_description` is the shorter blurb the home used.
+Projects used to be hardcoded in the templates; this seeds them into the DB so
+the public pages keep rendering after the move. It runs only when the `projects`
+table is empty, so it is safe to call on every startup and never clobbers admin
+edits. `featured`/`featured_order` reproduce the home scroller selection;
+`short_description` is the shorter blurb the home used.
 """
 
 from app.factory import db
@@ -49,10 +49,14 @@ _PROJECTS = [
      "Herramienta para calcular cortes de madera: seleccioná tipo de corte (cuadrado, rectangular), ingresá medidas y consultá el historial de cálculos.", ""),
     ("Leviatán", "https://leviatan.nexttech.com.ar/", "leviatan.png", False,
      "Horarios de ferries desde Colonia del Sacramento: salidas, llegadas y mapa con la operación de Buquebus y Colonia Express en un solo lugar.", ""),
+    ("Periodismo Federal", "https://periodismofederal.com/", "periodismofederal.png", True,
+     "Medio de noticias argentino con cobertura política, económica y electoral a nivel nacional y provincial: política, economía, finanzas, encuestas, agro, energía y negocios.",
+     "Medio de noticias argentino con cobertura política, económica y electoral a nivel nacional y provincial."),
 ]
 
 # Names shown on the home scroller, in display order.
-_FEATURED_ORDER = ["9 del 12", "GLÜCK", "Track Produce", "Kailua Sailing", "Chaac", "El Pampero"]
+_FEATURED_ORDER = ["9 del 12", "GLÜCK", "Track Produce", "Kailua Sailing", "Chaac", "El Pampero",
+                   "Periodismo Federal"]
 
 
 def seed_projects():
