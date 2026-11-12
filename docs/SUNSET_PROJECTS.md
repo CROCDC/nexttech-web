@@ -21,9 +21,10 @@ Browser ─→ Cloudflare (wildcard tunnel *.nexttech.com.ar) ─→ nginx-proxy
 - **Redirect:** `redirect_sunset_project_hosts` in `app/routes.py`. Any path and
   method on the old hostname goes to the closing page. `302` (not `301`) so
   browsers don't cache it and a project can come back.
-- **Page:** `app/templates/sunset_project.html`, `noindex`. Title, closing
-  sentence and thanks line are fixed in the template; `summary` (what the site
-  was) comes from the registry.
+- **Page:** `app/templates/sunset_project.html`, `noindex`. The wording is the
+  same for every project, plain and generic ("Sitio dado de baja" / "Dimos de
+  baja el sitio de <name> porque el proyecto no continuó."); only the name
+  changes. No project images or logos.
 
 ## Registry entry
 
@@ -31,21 +32,17 @@ Browser ─→ Cloudflare (wildcard tunnel *.nexttech.com.ar) ─→ nginx-proxy
 {
   "slug": "nahati",
   "name": "Ñahatí",
-  "hosts": ["nahati.nexttech.com.ar"],
-  "icon": "nahati.svg",
-  "summary": "Este sitio acompañó la restauración del Ñahatí, un velero clásico de madera de los años 20."
+  "hosts": ["nahati.nexttech.com.ar"]
 }
 ```
 
 - `slug`: URL segment of the closing page (lowercase, hyphens).
+- `name`: shown in the closing sentence.
 - `hosts`: every hostname the project used. Must also be in `VIRTUAL_HOST`.
-- `icon` (optional): file in `app/static/assets/sunset/`. Usually the project's
-  own favicon/logo. Avoid photos of people.
-- `summary`: one sentence, in Spanish, on what the site was.
 
 ## Checklist to retire a project
 
-1. **PR in this repo:** add the registry entry, the icon, and the hostname to
+1. **PR in this repo:** add the registry entry and the hostname to
    `VIRTUAL_HOST` in `docker-compose.yml`. Check the page locally at
    `/proyectos-finalizados/<slug>` and the redirect with
    `curl -I -H "Host: <hostname>" http://127.0.0.1:7001/`.

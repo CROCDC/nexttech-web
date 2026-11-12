@@ -2,8 +2,6 @@
   {
     "slug": "nahati",
     "name": "Ñahatí",
-    "hosts": ["nahati.nexttech.com.ar"],
-    "icon": "nahati.svg",
-    "summary": "Este sitio acompañó la restauración del Ñahatí, un velero clásico de madera de los años 20."
+    "hosts": ["nahati.nexttech.com.ar"]
   }
 ]

@@ -16,8 +16,6 @@ class SunsetProject:
     slug: str
     name: str
     hosts: tuple[str, ...]
-    summary: str  # one sentence on what the site was; the page adds the closing wording
-    icon: str = ''  # filename under static/assets/sunset/; '' shows no icon
 
 
 def normalize_host(host: str) -> str:
@@ -36,8 +34,6 @@ def _load() -> tuple[SunsetProject, ...]:
             slug=str(item['slug']),
             name=str(item['name']),
             hosts=tuple(normalize_host(str(h)) for h in item.get('hosts', [])),
-            summary=str(item.get('summary', '')),
-            icon=str(item.get('icon', '')),
         )
         for item in raw
     )

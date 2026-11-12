@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#070B16">
-    <meta name="description" content="{{ project.summary }} Como el proyecto no continúa, el sitio dejó de estar en línea.">
+    <meta name="description" content="Dimos de baja el sitio de {{ project.name }} porque el proyecto no continuó.">
     <meta name="author" content="Next Tech">
     <!-- Closing page of a retired project: reachable from its old hostname, kept out of search results. -->
     <meta name="robots" content="noindex, follow">
-    <meta property="og:title" content="{{ project.name }} cerró su ciclo">
-    <meta property="og:description" content="{{ project.summary }} Como el proyecto no continúa, el sitio dejó de estar en línea.">
+    <meta property="og:title" content="Sitio dado de baja: {{ project.name }}">
+    <meta property="og:description" content="Dimos de baja el sitio de {{ project.name }} porque el proyecto no continuó.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Next Tech">
     <meta property="og:locale" content="es_AR">
-    <title>{{ project.name }} cerró su ciclo - Next Tech</title>
+    <title>Sitio dado de baja: {{ project.name }} - Next Tech</title>
 
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" type="image/x-icon">
@@ -61,13 +61,9 @@
         <section class="section section-top sunset" aria-labelledby="sunset-titulo">
             <div class="container">
                 <div class="cta-inner sunset-card reveal in">
-                    {% if project.icon %}
-                    <img class="sunset-icon" src="{{ url_for('static', filename='assets/sunset/' ~ project.icon) }}" alt="" width="72" height="72">
-                    {% endif %}
                     <span class="eyebrow">Proyecto finalizado</span>
-                    <h1 id="sunset-titulo">{{ project.name }} cerró su ciclo</h1>
-                    <p>{{ project.summary }} Como el proyecto no continúa, el sitio dejó de estar en línea.</p>
-                    <p class="sunset-thanks">¡Gracias a quienes lo visitaron y siguieron la historia!</p>
+                    <h1 id="sunset-titulo">Sitio dado de baja</h1>
+                    <p>Dimos de baja el sitio de {{ project.name }} porque el proyecto no continuó.</p>
                     <div class="sunset-actions">
                         <a href="/projects" class="btn btn-primary">Ver otros proyectos <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                         <a href="/" class="btn btn-ghost">Ir a Next Tech</a>
