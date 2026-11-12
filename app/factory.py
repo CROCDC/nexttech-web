@@ -35,6 +35,10 @@ def create_app():
     # hardcodeada en los templates.
     app.config['UMAMI_WEBSITE_ID'] = os.environ.get('UMAMI_WEBSITE_ID')
 
+    # Public origin of the main site. Retired projects' hostnames redirect here
+    # (see SunsetProjectRepository); override in dev to test the redirect locally.
+    app.config['PUBLIC_BASE_URL'] = os.environ.get('PUBLIC_BASE_URL', 'https://nexttech.com.ar').rstrip('/')
+
     # Admin: protegido por HTTP Basic Auth con credenciales de entorno. Sin
     # ADMIN_PASSWORD el panel queda deshabilitado (responde 503). SECRET_KEY
     # sólo se usa para los mensajes flash del panel.

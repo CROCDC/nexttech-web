@@ -22,6 +22,8 @@ Conventions for *how* to add one (factory → routes → repository → model) l
 | GET | `/projects` | — | Full projects grid (`ProjectRepository.get_all()`, ordered by `sort_order`). |
 | GET | `/work-with-us` | — | Open job listings page (`JobOpeningRepository.get_all()`). |
 | GET | `/reportes/<slug>` | path: `slug` | Renders a web report from `app/reports/<slug>/`. `404` if the slug is unknown/invalid. Builds absolute Open Graph URLs. |
+| GET | `/proyectos-finalizados/<slug>` | path: `slug` | Closing page of a retired project, from `app/data/sunset_projects.json` (`SunsetProjectRepository`). `noindex`. `404` if the slug is unknown. |
+| ANY | *any path on a retired project's hostname* | `Host` header | `302` to `PUBLIC_BASE_URL` + `/proyectos-finalizados/<slug>`. A `before_request` hook matches the `Host` against the `hosts` of `sunset_projects.json`. See [`SUNSET_PROJECTS.md`](SUNSET_PROJECTS.md). |
 | GET | `/media/projects/<filename>` | path: `filename` | Serves a project icon from the durable uploads volume (`PROJECT_ICONS_FOLDER`), falling back to the bundled `static/assets/projects/` for legacy icons. `404` if missing. Templates build these URLs via the `project_icon_url()` helper (with a `?v=<mtime>` cache-buster). |
 | GET | `/robots.txt` | — | Serves the static `robots.txt`. |
 | GET | `/sitemap.xml` | — | Serves the static `sitemap.xml`. |

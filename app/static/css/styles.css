@@ -520,6 +520,24 @@ section[id] { scroll-margin-top: 80px; }
 .page-intro h1 { font-size: clamp(2.2rem, 5.4vw, 3.4rem); color: #fff; margin-bottom: 1rem; }
 .page-intro .subtitle { font-size: clamp(1.02rem, 2.2vw, 1.2rem); color: var(--text-soft); }
 
+/* Retired project closing page (/proyectos-finalizados/<slug>) --------------*/
+.sunset { min-height: 78vh; display: flex; align-items: center; }
+.sunset-card { max-width: 720px; margin: 0 auto; }
+.sunset-icon {
+    display: block; width: 72px; height: 72px; margin: 0 auto 1.4rem;
+    border-radius: 18px; box-shadow: 0 8px 24px rgba(2, 6, 18, 0.45);
+}
+.sunset-card h1 { font-size: clamp(2rem, 5vw, 3rem); color: #fff; margin-bottom: 1.2rem; }
+.sunset-card p { margin-bottom: 1rem; }
+.sunset-card .sunset-thanks { color: var(--text); font-weight: 500; margin-bottom: 2.2rem; }
+.sunset-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+@media (max-width: 600px) {
+    .sunset-card { padding: 2.4rem 1.4rem; }
+    .sunset-card p { font-size: 1.02rem; }
+    .sunset-actions { flex-direction: column; align-items: stretch; }
+    .sunset-actions .btn { width: 100%; }
+}
+
 /* Reveal on scroll ---------------------------------------------------------*/
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }

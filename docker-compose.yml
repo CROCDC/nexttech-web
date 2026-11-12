@@ -16,7 +16,12 @@ services:
       - ADMIN_USER=${ADMIN_USER}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - UPLOAD_FOLDER=/nexttech/uploads
-      - VIRTUAL_HOST=nexttech.com.ar,www.nexttech.com.ar
+      # Besides the main site, this app answers the old hostnames of retired
+      # projects (app/data/sunset_projects.json) and redirects them to their
+      # closing page. Stop the retired project's containers BEFORE deploying a
+      # new host here: nginx-proxy round-robins a host shared by two containers.
+      # Runbook: docs/SUNSET_PROJECTS.md
+      - VIRTUAL_HOST=nexttech.com.ar,www.nexttech.com.ar,nahati.nexttech.com.ar
       - VIRTUAL_PORT=7001
       - LETSENCRYPT_HOST=nexttech.com.ar,www.nexttech.com.ar
       - LETSENCRYPT_EMAIL=admin@nexttech.com.ar
