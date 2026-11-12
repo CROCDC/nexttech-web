@@ -1,6 +1,9 @@
 import os
 from datetime import datetime
-from flask import render_template, request, jsonify, send_from_directory, abort, url_for
+from typing import Optional
+
+from flask import render_template, request, jsonify, send_from_directory, abort, url_for, redirect
+from werkzeug.wrappers import Response
 from werkzeug.utils import secure_filename
 
 from app.factory import db
@@ -10,10 +13,30 @@ from app.repositories.job_application_repository import JobApplicationRepository
 from app.repositories.job_opening_repository import JobOpeningRepository
 from app.repositories.project_repository import ProjectRepository
 from app.repositories.report_repository import ReportRepository
+from app.repositories.sunset_project_repository import SunsetProjectRepository
 from app.models.job_opening import JobTypeEnum
 
 
 def register_routes(app):
+    @app.before_request
+    def redirect_sunset_project_hosts() -> Optional[Response]:
+        """Old hostnames of retired projects point at this app (see VIRTUAL_HOST in
+        docker-compose.yml). Any path on them goes to the project's closing page
+        on the main domain. 302, not 301: browsers don't cache it, so it can be
+        undone if a project comes back."""
+        project = SunsetProjectRepository.get_by_host(request.host)
+        if project is None:
+            return None
+        base = app.config['PUBLIC_BASE_URL']
+        return redirect(base + url_for('sunset_project', slug=project.slug), code=302)
+
+    @app.route('/proyectos-finalizados/<slug>')
+    def sunset_project(slug: str) -> str:
+        project = SunsetProjectRepository.get_by_slug(slug)
+        if project is None:
+            abort(404)
+        return render_template('sunset_project.html', project=project)
+
     def project_icon_url(icon):
         """URL for a project icon: from the durable volume when it lives there,
         else the bundled static asset (legacy icons committed in the image).
